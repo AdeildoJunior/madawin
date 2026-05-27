@@ -42,9 +42,10 @@
         </span>
       </a>
 
-      <form class="search-box" aria-label="Busca visual">
-        <input type="search" placeholder="O que você está procurando?" disabled>
-        <button type="button" aria-label="Buscar">🔎</button>
+      <form class="search-box" id="productSearchForm" aria-label="Busca de produtos">
+        <input id="productSearch" type="search" placeholder="Buscar vinho, cerveja, whisky, energético..." autocomplete="off">
+        <button id="productSearchButton" type="submit" aria-label="Buscar">🔎</button>
+        <div class="search-results" id="searchResults" aria-label="Resultados da busca"></div>
       </form>
 
       <div class="header-actions">
@@ -58,15 +59,20 @@
 
     <nav class="category-nav" aria-label="Categorias">
       <div class="container nav-scroll">
-        <a href="#vinhos">Vinhos</a>
-        <a href="#cervejas">Cervejas</a>
-        <a href="#espumantes">Espumantes</a>
-        <a href="#destilados">Destilados</a>
-        <a href="#kits">Kits</a>
-        <a href="#presentes">Presentes</a>
-        <a href="#delivery">Delivery</a>
+        <a href="#catalogo" data-nav-category="Todos">Categorias</a>
+        <a href="#catalogo" data-nav-category="Whisky">Whisky</a>
+        <a href="#catalogo" data-nav-category="Vinhos">Vinhos</a>
+        <a href="#catalogo" data-nav-category="Cervejas">Cervejas</a>
+        <a href="#catalogo" data-nav-category="Espumantes">Espumantes</a>
+        <a href="#catalogo" data-nav-category="Vodka">Vodka</a>
+        <a href="#catalogo" data-nav-category="Energéticos">Energéticos</a>
+        <a href="#catalogo" data-nav-category="Sem álcool">Sem álcool</a>
+        <a href="#catalogo" data-nav-category="Snacks">Snacks</a>
+        <a href="#catalogo" data-nav-category="Kits">Kits</a>
       </div>
     </nav>
+
+    <div class="mega-menu" id="megaMenu" aria-label="Submenu de categorias"></div>
   </header>
 
   <main id="inicio">
@@ -258,6 +264,27 @@
       </div>
     </section>
 
+
+    <section id="catalogo" class="section catalog-section">
+      <div class="container">
+        <div class="section-title row-title">
+          <div>
+            <p class="eyebrow">Catálogo rápido</p>
+            <h2>Consulte por categoria ou produto</h2>
+            <p class="catalog-note">
+              Os itens abaixo servem como vitrine de referência. Disponibilidade, valores e entrega devem ser confirmados pelo WhatsApp.
+            </p>
+          </div>
+
+          <div class="catalog-filter-pills" id="catalogFilterPills"></div>
+        </div>
+
+        <div class="catalog-status" id="catalogStatus"></div>
+        <div class="catalog-grid" id="catalogGrid"></div>
+      </div>
+    </section>
+
+
     <section class="section soft-section">
       <div class="container">
         <div class="section-title row-title">
@@ -395,6 +422,10 @@
           <p>
             Consulte produtos, kits, disponibilidade, retirada e entrega pelo WhatsApp oficial.
           </p>
+          <div class="business-info">
+            <span>📍 Rua Benfica, 845 — Madalena, Recife</span>
+            <span>📧 madabeer01@gmail.com</span>
+          </div>
         </div>
 
         <div class="contact-buttons">
