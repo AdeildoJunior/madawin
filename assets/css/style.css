@@ -1768,3 +1768,21 @@ body {
     top: 150px;
   }
 }
+
+/* === CORREÇÃO: MENU SUPERIOR APONTA PARA SUBPÁGINAS E DESATIVA MEGA-MENU ANTIGO === */
+
+.mega-menu {
+  display: none !important;
+}
+
+.category-nav .nav-scroll a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 4px 8px !important;
+}
+
+.category-nav .nav-scroll a:hover {
+  color: var(--green-800);
+}
+
