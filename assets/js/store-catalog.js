@@ -1,35 +1,30 @@
-
 (function () {
   const CATS = window.MADAWIN_CATEGORIES || {};
   const PRODUCTS = window.MADAWIN_PRODUCTS || [];
-  const WHATSAPP = "https://wa.me/5581996787177?text=";
+  const WHATSAPP_BASE = "https://wa.me/5581996787177?text=";
 
-  function brl(v) {
-    return Number(v).toLocaleString("pt-BR", {style:"currency", currency:"BRL"});
-  }
-
-  function waMsg(name) {
-    return WHATSAPP + encodeURIComponent("Olá, gostaria de consultar disponibilidade e valor de: " + name + " | Mada Wine & Beer");
+  function waLink(text) {
+    return WHATSAPP_BASE + encodeURIComponent(text);
   }
 
   function productCard(p) {
-    const icon = (CATS[p.category] && CATS[p.category].icon) ? CATS[p.category].icon : "🍷";
+    const cat = CATS[p.category] || {};
+    const icon = cat.icon || "🛒";
+    const msg = `Olá, gostaria de consultar disponibilidade de: ${p.name} na Mada Wine & Beer.`;
+
     return `
-      <article class="mw-price-card">
-        <div class="mw-price-card__image">${icon}</div>
-        <div class="mw-price-card__body">
-          <div class="mw-price-card__name">${p.name}</div>
-          <div class="mw-price-card__meta">${(p.tags || []).join(" • ")}</div>
-          <div class="mw-price-block">
-            ${p.old_price ? `<div class="mw-old-price">De: ${brl(p.old_price)}</div>` : ""}
-            <div class="mw-main-price">por: <strong>${brl(p.pix_price)}</strong> <span>no pix</span></div>
-            ${p.installments ? `<div class="mw-installments">${p.installments}</div>` : ""}
-            ${p.credit_price ? `<div class="mw-credit">${p.credit_price}</div>` : ""}
+      <article class="mw-product-card">
+        <div class="mw-product-card__visual">${icon}</div>
+        <div class="mw-product-card__body">
+          <h3>${p.name}</h3>
+          <p>${p.detail}</p>
+          <div class="mw-product-tags">
+            <span>${cat.title || p.category}</span>
+            ${(p.tags || []).map(t => `<span>${t}</span>`).join("")}
           </div>
-          <div class="mw-card-actions">
-            <a class="mw-btn mw-btn--line" href="/${p.category}/">Ver categoria</a>
-            <a class="mw-btn mw-btn--solid" href="${waMsg(p.name)}" target="_blank" rel="noopener">Consultar no WhatsApp</a>
-          </div>
+          <a class="mw-btn mw-btn--solid" href="${waLink(msg)}" target="_blank" rel="noopener">
+            Consultar disponibilidade
+          </a>
         </div>
       </article>
     `;
@@ -38,93 +33,63 @@
   function categoryCard(slug, cat) {
     return `
       <a class="mw-category-card" href="/${slug}/">
-        <div class="mw-category-card__icon">${cat.icon}</div>
-        <div class="mw-category-card__title">${cat.title}</div>
-        <div class="mw-category-card__text">${cat.subtitle}</div>
+        <div class="mw-category-card__icon">${cat.icon || "🛒"}</div>
+        <div class="mw-category-card__title">${cat.title || slug}</div>
+        <div class="mw-category-card__text">${cat.subtitle || ""}</div>
       </a>
     `;
   }
 
-  function getQuery(name) {
-    return new URLSearchParams(location.search).get(name) || "";
-  }
-
   function buildHome() {
-    const best = document.getElementById("mw-best-offers-grid");
-    const feat = document.getElementById("mw-featured-grid");
-    if (best) {
-      best.innerHTML = Object.entries(CATS).map(([slug, cat]) => categoryCard(slug, cat)).join("");
-    }
-    if (feat) {
-      feat.innerHTML = PRODUCTS.slice(0, 8).map(productCard).join("");
+    const cats = document.getElementById("mw-best-offers-grid");
+    const featured = document.getElementById("mw-featured-grid");
+
+    if (cats) {
+      cats.innerHTML = Object.entries(CATS).map(([slug, cat]) => categoryCard(slug, cat)).join("");
     }
 
-    const searchForm = document.getElementById("mw-home-search-form");
-    const searchInput = document.getElementById("mw-home-search-input");
-    if (searchForm && searchInput) {
-      searchForm.addEventListener("submit", function(e){
-        e.preventDefault();
-        const q = searchInput.value.trim();
-        if (!q) return;
-        location.href = "/vinhos/?q=" + encodeURIComponent(q);
-      });
+    if (featured) {
+      featured.innerHTML = PRODUCTS.slice(0, 12).map(productCard).join("");
     }
   }
 
   function buildCategoryPage() {
-    const container = document.getElementById("mw-category-grid");
-    if (!container) return;
+    const grid = document.getElementById("mw-category-grid");
+    if (!grid) return;
 
     const slug = document.body.dataset.category;
-    let list = PRODUCTS.filter(p => p.category === slug);
-
-    const q = getQuery("q").toLowerCase().trim();
-    if (q) {
-      list = list.filter(p =>
-        p.name.toLowerCase().includes(q) ||
-        (p.tags || []).join(" ").toLowerCase().includes(q)
-      );
-    }
-
-    const count = document.getElementById("mw-category-count");
-    if (count) count.textContent = list.length + " produto(s) encontrado(s)";
-
+    const cat = CATS[slug] || {};
     const title = document.getElementById("mw-category-title");
     const subtitle = document.getElementById("mw-category-subtitle");
-    if (title) title.textContent = (CATS[slug] && CATS[slug].title) || "Categoria";
-    if (subtitle) subtitle.textContent = (CATS[slug] && CATS[slug].subtitle) || "";
+    const count = document.getElementById("mw-category-count");
+    const filters = document.getElementById("mw-filters");
 
-    const filtersWrap = document.getElementById("mw-filters");
-    if (filtersWrap) {
+    let list = PRODUCTS.filter(p => p.category === slug);
+
+    if (title) title.textContent = cat.title || "Categoria";
+    if (subtitle) subtitle.textContent = cat.subtitle || "";
+    if (count) count.textContent = `${list.length} item(ns) para consulta`;
+
+    if (filters) {
       const tags = [...new Set(list.flatMap(p => p.tags || []))];
-      filtersWrap.innerHTML = tags.map(t => `<button class="mw-filter-chip" type="button" data-tag="${t}">${t}</button>`).join("");
-      filtersWrap.querySelectorAll(".mw-filter-chip").forEach(btn => {
+      filters.innerHTML = tags.map(t => `<button class="mw-filter-chip" type="button" data-tag="${t}">${t}</button>`).join("");
+
+      filters.querySelectorAll("[data-tag]").forEach(btn => {
         btn.addEventListener("click", () => {
-          filtersWrap.querySelectorAll(".mw-filter-chip").forEach(x => x.classList.remove("is-active"));
+          filters.querySelectorAll("[data-tag]").forEach(x => x.classList.remove("is-active"));
           btn.classList.add("is-active");
           const tag = btn.dataset.tag;
           const filtered = list.filter(p => (p.tags || []).includes(tag));
-          container.innerHTML = filtered.map(productCard).join("");
-          if (count) count.textContent = filtered.length + " produto(s) encontrado(s)";
+          grid.innerHTML = filtered.map(productCard).join("");
+          if (count) count.textContent = `${filtered.length} item(ns) para consulta`;
         });
       });
     }
 
-    container.innerHTML = list.map(productCard).join("");
-
-    const searchForm = document.getElementById("mw-cat-search-form");
-    const searchInput = document.getElementById("mw-cat-search-input");
-    if (searchForm && searchInput) {
-      if (q) searchInput.value = q;
-      searchForm.addEventListener("submit", function(e){
-        e.preventDefault();
-        const qq = searchInput.value.trim();
-        location.href = location.pathname + (qq ? ("?q=" + encodeURIComponent(qq)) : "");
-      });
-    }
+    grid.innerHTML = list.map(productCard).join("");
   }
 
-  document.addEventListener("DOMContentLoaded", function(){
+  document.addEventListener("DOMContentLoaded", () => {
     buildHome();
     buildCategoryPage();
   });
