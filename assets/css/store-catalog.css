@@ -431,3 +431,48 @@
   margin-bottom: 3px !important;
 }
 
+
+/* === FIX FINAL: preços sempre visíveis nos cards do catálogo novo === */
+
+.mw-price-card .mw-price-block {
+  display: block !important;
+  margin: 12px 0 16px !important;
+}
+
+.mw-price-card .mw-old-price {
+  display: block !important;
+  font-size: 13px !important;
+  color: #8c8f90 !important;
+  text-decoration: line-through !important;
+  margin-bottom: 4px !important;
+}
+
+.mw-price-card .mw-main-price {
+  display: block !important;
+  font-size: 16px !important;
+  color: #2a2d2d !important;
+  margin-bottom: 6px !important;
+}
+
+.mw-price-card .mw-main-price strong {
+  display: inline-block !important;
+  font-size: 31px !important;
+  color: #0d56c5 !important;
+  line-height: 1 !important;
+  letter-spacing: -0.04em !important;
+}
+
+.mw-price-card .mw-main-price span {
+  display: inline-block !important;
+  font-size: 14px !important;
+  color: #2d2d2d !important;
+}
+
+.mw-price-card .mw-installments,
+.mw-price-card .mw-credit {
+  display: block !important;
+  font-size: 14px !important;
+  color: #262626 !important;
+  margin-bottom: 3px !important;
+}
+
