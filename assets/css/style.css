@@ -1786,3 +1786,25 @@ body {
   color: var(--green-800);
 }
 
+
+/* === CORREÇÃO DE LINKS DO CARROSSEL/CARDS DE CATEGORIA === */
+
+.category-card {
+  cursor: pointer;
+}
+
+.category-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 38px rgba(4, 38, 23, .12);
+}
+
+.category-strip {
+  grid-auto-columns: minmax(160px, 1fr);
+}
+
+@media (min-width: 1200px) {
+  .category-strip {
+    grid-auto-columns: minmax(150px, 1fr);
+  }
+}
+
