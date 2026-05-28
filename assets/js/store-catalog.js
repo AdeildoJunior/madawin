@@ -1,48 +1,48 @@
-
 (function () {
-  const CATS = window.MADAWIN_CATEGORIES || {};
-  const PRODUCTS = window.MADAWIN_PRODUCTS || [];
-  const WHATSAPP = "https://wa.me/5581996787177?text=";
+  const CATS     = window.MADAWIN_CATEGORIES || {};
+  const PRODUCTS = window.MADAWIN_PRODUCTS   || [];
+  const WA_BASE  = "https://wa.me/5581996787177?text=";
 
   function brl(v) {
-    return Number(v).toLocaleString("pt-BR", {style:"currency", currency:"BRL"});
+    return Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  }
+
+  function offPct(old_price, pix_price) {
+    if (!old_price || !pix_price || old_price <= pix_price) return 0;
+    return Math.round(((old_price - pix_price) / old_price) * 100);
   }
 
   function waMsg(name) {
-    return WHATSAPP + encodeURIComponent("Olá, gostaria de consultar disponibilidade e valor de: " + name + " | Mada Wine & Beer");
+    return WA_BASE + encodeURIComponent("Olá! Quero comprar: " + name + " — Mada Wine & Beer");
   }
 
   function productCard(p) {
     const icon = (CATS[p.category] && CATS[p.category].icon) ? CATS[p.category].icon : "🍷";
-    return `
-      <article class="mw-price-card">
-        <div class="mw-price-card__image">${icon}</div>
-        <div class="mw-price-card__body">
-          <div class="mw-price-card__name">${p.name}</div>
-          <div class="mw-price-card__meta">${(p.tags || []).join(" • ")}</div>
-          <div class="mw-price-block">
-            ${p.old_price ? `<div class="mw-old-price">De: ${brl(p.old_price)}</div>` : ""}
-            <div class="mw-main-price">por: <strong>${brl(p.pix_price)}</strong> <span>no pix</span></div>
-            ${p.installments ? `<div class="mw-installments">${p.installments}</div>` : ""}
-            ${p.credit_price ? `<div class="mw-credit">${p.credit_price}</div>` : ""}
-          </div>
-          <div class="mw-card-actions">
-            <a class="mw-btn mw-btn--line" href="/${p.category}/">Ver categoria</a>
-            <a class="mw-btn mw-btn--solid" href="${waMsg(p.name)}" target="_blank" rel="noopener">Consultar no WhatsApp</a>
-          </div>
-        </div>
-      </article>
-    `;
+    const off  = offPct(p.old_price, p.pix_price);
+    const badge = off >= 5 ? '<div class="mw-off-badge">' + off + '% OFF</div>' : "";
+    return '<article class="mw-price-card">'
+      + '<div class="mw-price-card__image">' + badge + icon + '</div>'
+      + '<div class="mw-price-card__body">'
+      + '<div class="mw-price-card__name">' + p.name + '</div>'
+      + '<div class="mw-price-card__meta">' + (p.tags || []).join(" • ") + '</div>'
+      + '<div class="mw-price-block">'
+      + (p.old_price ? '<div class="mw-old-price">De: ' + brl(p.old_price) + '</div>' : "")
+      + '<div class="mw-main-price">por: <strong>' + brl(p.pix_price) + '</strong> <span>no PIX</span></div>'
+      + (p.installments ? '<div class="mw-installments">ou ' + p.installments + ' no cartão</div>' : "")
+      + (p.credit_price ? '<div class="mw-credit">' + p.credit_price + '</div>' : "")
+      + '</div>'
+      + '<div class="mw-card-actions">'
+      + '<a class="mw-btn mw-btn--line" href="/' + p.category + '/">Ver categoria</a>'
+      + '<a class="mw-btn mw-btn--solid" href="' + waMsg(p.name) + '" target="_blank" rel="noopener">🛒 Comprar</a>'
+      + '</div></div></article>';
   }
 
   function categoryCard(slug, cat) {
-    return `
-      <a class="mw-category-card" href="/${slug}/">
-        <div class="mw-category-card__icon">${cat.icon}</div>
-        <div class="mw-category-card__title">${cat.title}</div>
-        <div class="mw-category-card__text">${cat.subtitle}</div>
-      </a>
-    `;
+    return '<a class="mw-category-card" href="/' + slug + '/">'
+      + '<div class="mw-category-card__icon">' + cat.icon + '</div>'
+      + '<div class="mw-category-card__title">' + cat.title + '</div>'
+      + '<div class="mw-category-card__text">' + cat.subtitle + '</div>'
+      + '</a>';
   }
 
   function getQuery(name) {
@@ -50,60 +50,61 @@
   }
 
   function buildHome() {
-    const best = document.getElementById("mw-best-offers-grid");
-    const feat = document.getElementById("mw-featured-grid");
+    var best = document.getElementById("mw-best-offers-grid");
+    var feat = document.getElementById("mw-featured-grid");
     if (best) {
-      best.innerHTML = Object.entries(CATS).map(([slug, cat]) => categoryCard(slug, cat)).join("");
+      best.innerHTML = Object.entries(CATS).map(function(e){ return categoryCard(e[0], e[1]); }).join("");
     }
     if (feat) {
-      feat.innerHTML = PRODUCTS.slice(0, 8).map(productCard).join("");
+      var featured = Object.keys(CATS).reduce(function(acc, slug){
+        return acc.concat(PRODUCTS.filter(function(p){ return p.category === slug; }).slice(0, 2));
+      }, []).slice(0, 12);
+      feat.innerHTML = featured.map(productCard).join("");
     }
-
-    const searchForm = document.getElementById("mw-home-search-form");
-    const searchInput = document.getElementById("mw-home-search-input");
-    if (searchForm && searchInput) {
-      searchForm.addEventListener("submit", function(e){
+    var form  = document.getElementById("mw-home-search-form");
+    var input = document.getElementById("mw-home-search-input");
+    if (form && input) {
+      form.addEventListener("submit", function(e){
         e.preventDefault();
-        const q = searchInput.value.trim();
-        if (!q) return;
-        location.href = "/vinhos/?q=" + encodeURIComponent(q);
+        var q = input.value.trim();
+        if (q) location.href = "/vinhos/?q=" + encodeURIComponent(q);
       });
     }
   }
 
   function buildCategoryPage() {
-    const container = document.getElementById("mw-category-grid");
+    var container = document.getElementById("mw-category-grid");
     if (!container) return;
 
-    const slug = document.body.dataset.category;
-    let list = PRODUCTS.filter(p => p.category === slug);
-
-    const q = getQuery("q").toLowerCase().trim();
+    var slug = document.body.dataset.category;
+    var list = PRODUCTS.filter(function(p){ return p.category === slug; });
+    var q    = getQuery("q").toLowerCase().trim();
     if (q) {
-      list = list.filter(p =>
-        p.name.toLowerCase().includes(q) ||
-        (p.tags || []).join(" ").toLowerCase().includes(q)
-      );
+      list = list.filter(function(p){
+        return p.name.toLowerCase().indexOf(q) !== -1 ||
+               (p.tags || []).join(" ").toLowerCase().indexOf(q) !== -1;
+      });
     }
 
-    const count = document.getElementById("mw-category-count");
-    if (count) count.textContent = list.length + " produto(s) encontrado(s)";
-
-    const title = document.getElementById("mw-category-title");
-    const subtitle = document.getElementById("mw-category-subtitle");
-    if (title) title.textContent = (CATS[slug] && CATS[slug].title) || "Categoria";
+    var count    = document.getElementById("mw-category-count");
+    var title    = document.getElementById("mw-category-title");
+    var subtitle = document.getElementById("mw-category-subtitle");
+    if (title)    title.textContent    = (CATS[slug] && CATS[slug].title)    || "Categoria";
     if (subtitle) subtitle.textContent = (CATS[slug] && CATS[slug].subtitle) || "";
+    if (count)    count.textContent    = list.length + " produto(s) encontrado(s)";
 
-    const filtersWrap = document.getElementById("mw-filters");
+    var filtersWrap = document.getElementById("mw-filters");
     if (filtersWrap) {
-      const tags = [...new Set(list.flatMap(p => p.tags || []))];
-      filtersWrap.innerHTML = tags.map(t => `<button class="mw-filter-chip" type="button" data-tag="${t}">${t}</button>`).join("");
-      filtersWrap.querySelectorAll(".mw-filter-chip").forEach(btn => {
-        btn.addEventListener("click", () => {
-          filtersWrap.querySelectorAll(".mw-filter-chip").forEach(x => x.classList.remove("is-active"));
+      var tags = [];
+      list.forEach(function(p){ (p.tags||[]).forEach(function(t){ if(tags.indexOf(t)===-1) tags.push(t); }); });
+      filtersWrap.innerHTML = '<button class="mw-filter-chip is-active" type="button" data-tag="">Todos</button>'
+        + tags.map(function(t){ return '<button class="mw-filter-chip" type="button" data-tag="' + t + '">' + t + '</button>'; }).join("");
+      filtersWrap.querySelectorAll(".mw-filter-chip").forEach(function(btn){
+        btn.addEventListener("click", function(){
+          filtersWrap.querySelectorAll(".mw-filter-chip").forEach(function(x){ x.classList.remove("is-active"); });
           btn.classList.add("is-active");
-          const tag = btn.dataset.tag;
-          const filtered = list.filter(p => (p.tags || []).includes(tag));
+          var tag      = btn.dataset.tag;
+          var filtered = tag ? list.filter(function(p){ return (p.tags||[]).indexOf(tag) !== -1; }) : list;
           container.innerHTML = filtered.map(productCard).join("");
           if (count) count.textContent = filtered.length + " produto(s) encontrado(s)";
         });
@@ -112,14 +113,14 @@
 
     container.innerHTML = list.map(productCard).join("");
 
-    const searchForm = document.getElementById("mw-cat-search-form");
-    const searchInput = document.getElementById("mw-cat-search-input");
-    if (searchForm && searchInput) {
-      if (q) searchInput.value = q;
-      searchForm.addEventListener("submit", function(e){
+    var sForm  = document.getElementById("mw-cat-search-form");
+    var sInput = document.getElementById("mw-cat-search-input");
+    if (sForm && sInput) {
+      if (q) sInput.value = q;
+      sForm.addEventListener("submit", function(e){
         e.preventDefault();
-        const qq = searchInput.value.trim();
-        location.href = location.pathname + (qq ? ("?q=" + encodeURIComponent(qq)) : "");
+        var qq = sInput.value.trim();
+        location.href = location.pathname + (qq ? "?q=" + encodeURIComponent(qq) : "");
       });
     }
   }

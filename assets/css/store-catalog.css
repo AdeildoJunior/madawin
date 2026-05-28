@@ -300,3 +300,32 @@
     font-size: 28px;
   }
 }
+
+/* ─── Badge OFF agressivo ─── */
+.mw-price-card__image {
+  position: relative;
+}
+.mw-off-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #d4000a;
+  color: #fff;
+  font-weight: 900;
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  letter-spacing: .04em;
+  box-shadow: 0 3px 10px rgba(212,0,10,.35);
+  z-index: 2;
+}
+/* Cor do preço principal — verde Mada */
+.mw-main-price strong {
+  color: #0a5e30 !important;
+}
+/* Filtro ativo */
+.mw-filter-chip.is-active {
+  background: #0d572f;
+  color: #fff;
+  border-color: #0d572f;
+}
