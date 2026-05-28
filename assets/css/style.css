@@ -1808,3 +1808,43 @@ body {
   }
 }
 
+
+/* === AJUSTE FINAL: barra fixa inferior do WhatsApp mais baixa === */
+
+body {
+  padding-bottom: 34px !important;
+}
+
+.whatsapp-float {
+  min-height: 34px !important;
+  height: 34px !important;
+  padding: 0 12px !important;
+  font-size: 13px !important;
+  line-height: 1.1 !important;
+  gap: 6px !important;
+}
+
+.whatsapp-float span {
+  line-height: 1.1 !important;
+}
+
+.whatsapp-bar-icon {
+  font-size: 14px !important;
+}
+
+@media (max-width: 620px) {
+  body {
+    padding-bottom: 38px !important;
+  }
+
+  .whatsapp-float {
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 10px !important;
+    font-size: 12px !important;
+  }
+
+  .whatsapp-bar-icon {
+    font-size: 13px !important;
+  }
+}
