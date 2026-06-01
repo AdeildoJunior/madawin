@@ -327,6 +327,59 @@ h1, h2, h3,
 }
 
 /* =====================================================================
+   CARROSSEL "DESTAQUES DA LOJA" (estilo casadabebida)
+   ===================================================================== */
+.mw-carousel {
+  position: relative;
+  margin-top: 22px;
+}
+.mw-carousel__track {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 4px 16px;
+}
+.mw-carousel__track::-webkit-scrollbar { height: 8px; }
+.mw-carousel__track::-webkit-scrollbar-thumb { background: #cfd8d2; border-radius: 8px; }
+.mw-carousel__track > .mw-price-card {
+  flex: 0 0 248px;
+  width: 248px;
+  scroll-snap-align: start;
+}
+.mw-carousel__nav {
+  position: absolute;
+  top: 130px;
+  transform: translateY(-50%);
+  z-index: 6;
+  width: 46px;
+  height: 46px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: var(--mw-gold);
+  color: #1b2a1f;
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,.20);
+  transition: transform .15s ease, background .15s ease;
+}
+.mw-carousel__nav:hover { transform: translateY(-50%) scale(1.08); background: var(--mw-gold-soft); }
+.mw-carousel__nav--prev { left: -8px; }
+.mw-carousel__nav--next { right: -8px; }
+
+@media (max-width: 680px) {
+  .mw-carousel__track > .mw-price-card { flex-basis: 210px; width: 210px; }
+  .mw-carousel__nav { display: none; }
+}
+
+/* =====================================================================
    RESPONSIVO
    ===================================================================== */
 @media (max-width: 560px) {

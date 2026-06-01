@@ -242,9 +242,39 @@
     }
   }
 
+  // Slugs com foto real -> alimentam o carrossel "Destaques da loja".
+  // Acrescente o slug aqui quando subir uma nova foto em /assets/img/products/.
+  var PHOTO_SLUGS = [
+    "jw-red-1l","chivas-regal-1l","grand-old-parr-1l","grand-old-parr-750","jack-daniels-fire-1l",
+    "chandon-brut","chandon-pass-rose","casa-perini-brut","casa-perini-moscatel","casa-perini-aquarela",
+    "luigi-bosca-malbec","terrazas-malbec","terrazas-syrah","esporao-reserva","casillero-diablo-pedro",
+    "casal-garcia-sweet","verde-casal-garcia","sea-sun-rose","aperol-750","bacardi-branca-980",
+    "bacardi-big-apple","smirnoff-998","smirnoff-ice-275","gin-larios-700","gin-rocks-1l",
+    "heineken-long-330"
+  ];
+
+  function buildCarousel() {
+    var track = document.getElementById("mw-carousel-track");
+    if (!track) return;
+    var bySlug = {};
+    PRODUCTS.forEach(function (p) { bySlug[p.slug] = p; });
+    var list = PHOTO_SLUGS.map(function (s) { return bySlug[s]; }).filter(Boolean);
+    if (!list.length) { var sec0 = document.getElementById("mw-carousel-section"); if (sec0) sec0.style.display = "none"; return; }
+
+    track.innerHTML = list.map(productCard).join("");
+
+    var sec  = document.getElementById("mw-carousel-section");
+    var prev = sec && sec.querySelector(".mw-carousel__nav--prev");
+    var next = sec && sec.querySelector(".mw-carousel__nav--next");
+    function step() { return Math.max(248, track.clientWidth * 0.8); }
+    if (prev) prev.addEventListener("click", function () { track.scrollBy({ left: -step(), behavior: "smooth" }); });
+    if (next) next.addEventListener("click", function () { track.scrollBy({ left:  step(), behavior: "smooth" }); });
+  }
+
   document.addEventListener("DOMContentLoaded", function(){
     wireHeaderSearch();
     buildHome();
+    buildCarousel();
     buildCategoryPage();
   });
 })();
