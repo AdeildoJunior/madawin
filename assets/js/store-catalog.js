@@ -3,6 +3,24 @@
   const PRODUCTS = window.MADAWIN_PRODUCTS   || [];
   const WA_BASE  = "https://wa.me/5581996787177?text=";
 
+  // Silhuetas de linha (substituem o emoji "infantil" no card sem foto)
+  var LINE_ICONS = {
+    vinhos: '<path d="M10 2.5h4M11 2.5v2.8c0 .7-.2 1.3-.7 1.9L9.1 8.7c-.5.6-.7 1.2-.7 1.9V19.5A1.6 1.6 0 0 0 10 21.1h4A1.6 1.6 0 0 0 15.6 19.5V10.5c0-.7-.2-1.3-.7-1.9l-1.2-1.5c-.5-.6-.7-1.2-.7-1.9V2.5"/><path d="M8.4 13h7.2"/>',
+    cervejas: '<path d="M7 7.5h8.5v12.5a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V7.5z"/><path d="M15.5 9.5H18a1.6 1.6 0 0 1 1.6 1.6v3.6A1.6 1.6 0 0 1 18 16.3h-2.5"/><path d="M7 7.5c0-1.7 1.1-2.8 2.8-2.8S12.6 5.8 12.6 7.5"/>',
+    espumantes: '<path d="M8.5 3.5l1 6.2a2 2 0 0 0 1.5 1.6V20M8.5 20h4"/><path d="M15.5 3.5l-1 6.2a2 2 0 0 1-1.5 1.6"/>',
+    whisky: '<path d="M6.5 6.5h11l-1.1 12.4a1 1 0 0 1-1 .9H8.6a1 1 0 0 1-1-.9L6.5 6.5z"/><path d="M8 12.5c2.2-1.1 5.8-1.1 8 0"/>',
+    destilados: '<path d="M10 2.5h4M11 2.5v2.8c0 .7-.2 1.3-.7 1.9L9.1 8.7c-.5.6-.7 1.2-.7 1.9V19.5A1.6 1.6 0 0 0 10 21.1h4A1.6 1.6 0 0 0 15.6 19.5V10.5c0-.7-.2-1.3-.7-1.9l-1.2-1.5c-.5-.6-.7-1.2-.7-1.9V2.5"/>',
+    kits: '<rect x="4" y="9.5" width="16" height="11" rx="1.2"/><path d="M4 13.5h16M12 9.5v11M12 9.5C10 6 6.5 6.3 6.5 8.3S9.8 9.5 12 9.5zM12 9.5C14 6 17.5 6.3 17.5 8.3S14.2 9.5 12 9.5z"/>'
+  };
+  LINE_ICONS.vodka = LINE_ICONS.destilados;
+  LINE_ICONS.gin   = LINE_ICONS.destilados;
+
+  function lineIcon(cat) {
+    var p = LINE_ICONS[cat] || LINE_ICONS.destilados;
+    return '<svg class="mw-bottle-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+      + 'stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + p + '</svg>';
+  }
+
   function brl(v) {
     return Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   }
@@ -24,7 +42,7 @@
     // Fallback elegante sempre presente; a foto real fica por cima e só
     // aparece se carregar (senão o <img> se remove e mostra o fallback).
     const visual = '<div class="mw-fallback">'
-      + '<span class="mw-fallback__icon">' + icon + '</span>'
+      + '<span class="mw-fallback__icon">' + lineIcon(p.category) + '</span>'
       + '<span>' + p.name + '</span>'
       + '<small>Foto sob consulta</small>'
       + '</div>'

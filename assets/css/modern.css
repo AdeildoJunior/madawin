@@ -148,9 +148,9 @@ h1, h2, h3,
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 14px;
-  background: radial-gradient(circle at 50% 30%, #ffffff, #eef2ec 78%);
-  filter: drop-shadow(0 14px 20px rgba(8, 51, 31, .18));
+  padding: 12px;
+  background: #ffffff;
+  filter: drop-shadow(0 12px 18px rgba(8, 51, 31, .15));
   transition: transform .3s ease;
 }
 
@@ -176,9 +176,14 @@ h1, h2, h3,
 }
 
 .mw-price-card__image .mw-fallback .mw-fallback__icon {
-  font-size: 46px;
-  opacity: .55;
-  filter: grayscale(.15);
+  display: inline-flex;
+}
+
+.mw-bottle-ico {
+  width: 58px;
+  height: 58px;
+  color: var(--mw-green-800);
+  opacity: .38;
 }
 
 .mw-price-card__image .mw-fallback small {
