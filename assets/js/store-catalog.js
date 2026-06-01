@@ -2,6 +2,19 @@
   const CATS     = window.MADAWIN_CATEGORIES || {};
   const PRODUCTS = window.MADAWIN_PRODUCTS   || [];
   const WA_BASE  = "https://wa.me/5581996787177?text=";
+  // Compra direcionada para a loja no iFood; WhatsApp fica para tirar dúvidas.
+  const IFOOD_URL = "https://www.ifood.com.br/delivery/recife-pe/mada-wine--beer-madalena/0f98f004-eb88-416a-9e51-d066996ce5a2";
+
+  // Foto representativa de cada categoria (usa uma foto real já existente).
+  const CAT_PHOTO = {
+    vinhos: "luigi-bosca-malbec",
+    cervejas: "heineken-long-330",
+    espumantes: "chandon-brut",
+    whisky: "chivas-regal-1l",
+    vodka: "smirnoff-998",
+    gin: "gin-larios-700",
+    destilados: "bacardi-branca-980"
+  };
 
   // Silhuetas de linha (substituem o emoji "infantil" no card sem foto)
   var LINE_ICONS = {
@@ -31,7 +44,7 @@
   }
 
   function waMsg(name) {
-    return WA_BASE + encodeURIComponent("Olá! Quero comprar: " + name + " — Mada Wine & Beer");
+    return WA_BASE + encodeURIComponent("Olá! Tenho uma dúvida sobre: " + name + " — Mada Wine & Beer");
   }
 
   function productCard(p) {
@@ -60,14 +73,21 @@
       + (p.credit_price ? '<div class="mw-credit">' + p.credit_price + '</div>' : "")
       + '</div>'
       + '<div class="mw-card-actions">'
-      + '<a class="mw-btn mw-btn--line" href="/' + p.category + '/">Ver categoria</a>'
-      + '<a class="mw-btn mw-btn--solid" href="' + waMsg(p.name) + '" target="_blank" rel="noopener">🛒 Comprar</a>'
+      + '<a class="mw-btn mw-btn--ifood" href="' + IFOOD_URL + '" target="_blank" rel="noopener">🛒 Comprar no iFood</a>'
+      + '<a class="mw-btn mw-btn--wa" href="' + waMsg(p.name) + '" target="_blank" rel="noopener">💬 Dúvida no WhatsApp</a>'
       + '</div></div></article>';
   }
 
   function categoryCard(slug, cat) {
+    var photo = CAT_PHOTO[slug];
+    var media = photo
+      ? '<div class="mw-category-card__icon mw-category-card__icon--photo">'
+          + '<img src="/assets/img/products/' + photo + '.jpg" alt="' + cat.title + '" loading="lazy" onerror="this.remove();">'
+          + '<span class="mw-cat-emoji">' + cat.icon + '</span>'
+        + '</div>'
+      : '<div class="mw-category-card__icon">' + cat.icon + '</div>';
     return '<a class="mw-category-card" href="/' + slug + '/">'
-      + '<div class="mw-category-card__icon">' + cat.icon + '</div>'
+      + media
       + '<div class="mw-category-card__title">' + cat.title + '</div>'
       + '<div class="mw-category-card__text">' + cat.subtitle + '</div>'
       + '</a>';

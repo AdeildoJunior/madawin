@@ -380,8 +380,59 @@ h1, h2, h3,
 }
 
 /* =====================================================================
+   AÇÕES DO CARD — Comprar no iFood + Dúvida no WhatsApp (empilhados)
+   ===================================================================== */
+.mw-card-actions {
+  flex-direction: column;
+  gap: 8px;
+}
+.mw-card-actions .mw-btn {
+  width: 100%;
+}
+.mw-btn--ifood {
+  background: #ea1d2c;
+  color: #fff;
+  border: none;
+}
+.mw-btn--ifood:hover { filter: brightness(.95); }
+.mw-btn--wa {
+  background: #fff;
+  color: #0c7a3e;
+  border: 1px solid rgba(12, 122, 62, .4);
+}
+.mw-btn--wa:hover { background: #f1faf4; }
+
+/* =====================================================================
+   FOTO REAL no card de categoria (substitui o emoji)
+   ===================================================================== */
+.mw-category-card__icon--photo {
+  width: 96px;
+  height: 96px;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid var(--mw-line);
+  border-radius: 18px;
+  overflow: hidden;
+}
+.mw-category-card__icon--photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.mw-category-card__icon--photo .mw-cat-emoji { display: none; }
+.mw-category-card__icon--photo .mw-cat-emoji:only-child {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 32px;
+}
+
+/* =====================================================================
    RESPONSIVO
    ===================================================================== */
 @media (max-width: 560px) {
   .mw-category-card__icon { width: 56px; height: 56px; font-size: 28px; }
+  .mw-category-card__icon--photo { width: 76px; height: 76px; }
 }
