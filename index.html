@@ -87,8 +87,8 @@
               <h1>Bebidas selecionadas para bons momentos.</h1>
               <p>Vinhos, cervejas, destilados e kits especiais com atendimento próximo, prático e responsável.</p>
               <div class="hero-buttons">
-                <a class="btn btn-gold" href="https://www.instagram.com/madawinebeer/" target="_blank" rel="noopener">Ver Instagram</a>
-                <a class="btn btn-outline" href="#categorias">Ver categorias</a>
+                <a class="btn btn-gold" href="#mw-best-offers">Ver catálogo</a>
+                <a class="btn btn-outline" href="https://www.instagram.com/madawinebeer/" target="_blank" rel="noopener">Instagram</a>
               </div>
               <small>Atendimento exclusivo para maiores de 18 anos.</small>
             </div>
@@ -140,242 +140,35 @@
       </div>
     </section>
 
+    <section class="mw-section mw-section--soft" id="mw-best-offers">
+      <div class="mw-section__eyebrow">ESCOLHA SUA CATEGORIA</div>
+      <h2 class="mw-section__title">Encontre sua bebida</h2>
+      <p class="mw-section__text">Busque um rótulo ou escolha a categoria para ver preços e consultar disponibilidade pelo WhatsApp.</p>
 
-    <section id="promocoes" class="promo-showcase">
-      <div class="container promo-wide-container">
-        <div class="promo-head">
-          <div>
-            <p class="eyebrow">Promoções e destaques</p>
-            <h2>Uma vitrine para bebidas, ofertas e novidades</h2>
-          </div>
+      <form id="mw-home-search-form" class="mw-search-inline">
+        <input id="mw-home-search-input" type="search" placeholder="Busque por vinho, whisky, espumante, gin, vodka ou kit">
+        <button class="mw-btn mw-btn--solid" type="submit">Buscar</button>
+      </form>
 
-          <div class="carousel-controls">
-            <button type="button" id="promoPrev" aria-label="Voltar promoções">‹</button>
-            <button type="button" id="promoNext" aria-label="Avançar promoções">›</button>
-          </div>
-        </div>
+      <div id="mw-best-offers-grid" class="mw-grid-cats"></div>
+    </section>
 
-        <div class="wide-promo-carousel" id="widePromoCarousel">
-          <article class="wide-promo-card wide-promo-feature">
-            <div>
-              <span class="promo-badge">Destaque</span>
-              <h3>Vinhos para presentear</h3>
-              <p>Espaço ideal para colocar imagem de campanha, garrafas e chamada promocional.</p>
-              <a href="https://wa.me/5581996787177?text=Ol%C3%A1%2C%20gostaria%20de%20consultar%20bebidas%2C%20kits%20e%20disponibilidade%20na%20Mada%20Wine%20%26%20Beer." target="_blank" rel="noopener">Consultar disponibilidade</a>
-            </div>
-            <span class="promo-emoji">🍷</span>
-          </article>
-
-          <article class="wide-promo-card">
-            <span class="promo-badge">Oferta</span>
-            <span class="promo-emoji">🍺</span>
-            <h3>Cervejas geladas</h3>
-            <p>Promoções rápidas para fim de semana.</p>
-          </article>
-
-          <article class="wide-promo-card">
-            <span class="promo-badge">Kits</span>
-            <span class="promo-emoji">🎁</span>
-            <h3>Kits especiais</h3>
-            <p>Combinações para presentes e datas comemorativas.</p>
-          </article>
-
-          <article class="wide-promo-card">
-            <span class="promo-badge">Premium</span>
-            <span class="promo-emoji">🥃</span>
-            <h3>Destilados</h3>
-            <p>Whisky, gin, vodka e bebidas especiais.</p>
-          </article>
-
-          <article class="wide-promo-card">
-            <span class="promo-badge">Celebração</span>
-            <span class="promo-emoji">🥂</span>
-            <h3>Espumantes</h3>
-            <p>Opções para brindar e presentear.</p>
-          </article>
-
-          <article class="wide-promo-card">
-            <span class="promo-badge">Delivery</span>
-            <span class="promo-emoji">🚚</span>
-            <h3>Encomendas</h3>
-            <p>Consulte retirada, entrega e disponibilidade.</p>
-          </article>
-
-          <article class="wide-promo-card">
-            <span class="promo-badge">Novidade</span>
-            <span class="promo-emoji">🍾</span>
-            <h3>Rótulos novos</h3>
-            <p>Área para destacar novidades do Instagram.</p>
-          </article>
-
-          <article class="wide-promo-card">
-            <span class="promo-badge">Mada</span>
-            <span class="promo-emoji">🛒</span>
-            <h3>Consulte pelo direct</h3>
-            <p>Vitrine sem carrinho real por enquanto.</p>
-          </article>
-        </div>
+    <section class="mw-section" id="mw-carousel-section">
+      <div class="mw-section__eyebrow">SELEÇÃO COM FOTO</div>
+      <h2 class="mw-section__title">Destaques da loja</h2>
+      <p class="mw-section__text">Role para o lado e veja rótulos com foto real. Consulte e compre direto pelo WhatsApp.</p>
+      <div class="mw-carousel">
+        <button type="button" class="mw-carousel__nav mw-carousel__nav--prev" aria-label="Ver anteriores">‹</button>
+        <div class="mw-carousel__track" id="mw-carousel-track"></div>
+        <button type="button" class="mw-carousel__nav mw-carousel__nav--next" aria-label="Ver próximos">›</button>
       </div>
     </section>
 
-
-    <section id="categorias" class="section">
-      <div class="container">
-        <div class="section-title">
-          <p class="eyebrow">Categorias</p>
-          <h2>Escolha o tipo de bebida</h2>
-        </div>
-
-        <div class="category-strip" id="categoryStrip">
-          <a class="category-card" href="/vinhos/">
-            <span>🍷</span>
-            <strong>Vinhos</strong>
-            <small>Tintos, brancos e rosés</small>
-          </a>
-
-          <a class="category-card" href="/cervejas/">
-            <span>🍺</span>
-            <strong>Cervejas</strong>
-            <small>Long necks, latas e especiais</small>
-          </a>
-
-          <a class="category-card" href="/espumantes/">
-            <span>🥂</span>
-            <strong>Espumantes</strong>
-            <small>Datas especiais e celebrações</small>
-          </a>
-
-          <a class="category-card" href="/destilados/">
-            <span>🥃</span>
-            <strong>Destilados</strong>
-            <small>Whisky, vodka, gin e mais</small>
-          </a>
-
-          <a class="category-card" href="/kits/">
-            <span>🎁</span>
-            <strong>Kits</strong>
-            <small>Combinações para presente</small>
-          </a>
-
-          <a id="delivery" class="category-card" href="https://wa.me/5581996787177?text=Ol%C3%A1%2C%20gostaria%20de%20consultar%20bebidas%2C%20kits%20e%20disponibilidade%20na%20Mada%20Wine%20%26%20Beer." target="_blank" rel="noopener">
-            <span>🚚</span>
-            <strong>Delivery</strong>
-            <small>Consulte disponibilidade</small>
-          </a>
-        </div>
-      </div>
-    </section>
-    <section class="section soft-section">
-      <div class="container">
-        <div class="section-title row-title">
-          <div>
-            <p class="eyebrow">Destaques</p>
-            <h2>Opções para consultar</h2>
-          </div>
-
-          <div class="carousel-controls">
-            <button type="button" id="productsPrev" aria-label="Voltar destaques">‹</button>
-            <button type="button" id="productsNext" aria-label="Avançar destaques">›</button>
-          </div>
-        </div>
-
-        <div class="product-carousel" id="productCarousel">
-          <article class="product-card">
-            <div class="product-visual wine">🍷</div>
-            <h3>Vinhos para presentear</h3>
-            <p>Consulte rótulos disponíveis e sugestões conforme a ocasião.</p>
-            <a href="https://wa.me/5581996787177?text=Ol%C3%A1%2C%20gostaria%20de%20consultar%20bebidas%2C%20kits%20e%20disponibilidade%20na%20Mada%20Wine%20%26%20Beer." target="_blank" rel="noopener">Consultar</a>
-          </article>
-
-          <article class="product-card">
-            <div class="product-visual beer">🍺</div>
-            <h3>Cervejas para o fim de semana</h3>
-            <p>Opções geladas e práticas para encontros e confraternizações.</p>
-            <a href="https://wa.me/5581996787177?text=Ol%C3%A1%2C%20gostaria%20de%20consultar%20bebidas%2C%20kits%20e%20disponibilidade%20na%20Mada%20Wine%20%26%20Beer." target="_blank" rel="noopener">Consultar</a>
-          </article>
-
-          <article class="product-card">
-            <div class="product-visual whisky">🥃</div>
-            <h3>Destilados e especiais</h3>
-            <p>Whisky, gin, vodka e outras opções conforme disponibilidade.</p>
-            <a href="https://wa.me/5581996787177?text=Ol%C3%A1%2C%20gostaria%20de%20consultar%20bebidas%2C%20kits%20e%20disponibilidade%20na%20Mada%20Wine%20%26%20Beer." target="_blank" rel="noopener">Consultar</a>
-          </article>
-
-          <article class="product-card">
-            <div class="product-visual gift">🎁</div>
-            <h3>Kits personalizados</h3>
-            <p>Monte uma opção com bebida, embalagem e itens complementares.</p>
-            <a href="https://wa.me/5581996787177?text=Ol%C3%A1%2C%20gostaria%20de%20consultar%20bebidas%2C%20kits%20e%20disponibilidade%20na%20Mada%20Wine%20%26%20Beer." target="_blank" rel="noopener">Consultar</a>
-          </article>
-
-          <article class="product-card">
-            <div class="product-visual sparkling">🥂</div>
-            <h3>Espumantes</h3>
-            <p>Opções para celebrações, datas especiais e presentes.</p>
-            <a href="https://wa.me/5581996787177?text=Ol%C3%A1%2C%20gostaria%20de%20consultar%20bebidas%2C%20kits%20e%20disponibilidade%20na%20Mada%20Wine%20%26%20Beer." target="_blank" rel="noopener">Consultar</a>
-          </article>
-
-          <article class="product-card">
-            <div class="product-visual delivery">🚚</div>
-            <h3>Encomendas</h3>
-            <p>Consulte disponibilidade, retirada, entrega e combinações.</p>
-            <a href="https://wa.me/5581996787177?text=Ol%C3%A1%2C%20gostaria%20de%20consultar%20bebidas%2C%20kits%20e%20disponibilidade%20na%20Mada%20Wine%20%26%20Beer." target="_blank" rel="noopener">Consultar</a>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="presentes" class="section split-section">
-      <div class="container split-grid">
-        <div>
-          <p class="eyebrow">Kits e presentes</p>
-          <h2>Uma escolha elegante sem complicação.</h2>
-          <p>
-            O Mada Wine & Beer pode ajudar na escolha de bebidas para aniversários,
-            datas comemorativas, encontros, confraternizações e presentes.
-          </p>
-        </div>
-
-        <div class="feature-box">
-          <h3>Ideias de composição</h3>
-          <ul>
-            <li>Vinho + embalagem especial</li>
-            <li>Cervejas + petiscos</li>
-            <li>Espumante para celebração</li>
-            <li>Destilado para presente</li>
-            <li>Combinações sob consulta</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="brand-section">
-      <div class="container">
-        <div class="section-title">
-          <p class="eyebrow">Vitrine</p>
-          <h2>Uma apresentação simples, direta e elegante</h2>
-        </div>
-
-        <div class="brand-grid">
-          <article>
-            <span>🏷️</span>
-            <h3>Atendimento próximo</h3>
-            <p>Canal direto para consultar disponibilidade e opções.</p>
-          </article>
-
-          <article>
-            <span>🎁</span>
-            <h3>Presentes e kits</h3>
-            <p>Combinações para datas especiais e confraternizações.</p>
-          </article>
-
-          <article>
-            <span>✅</span>
-            <h3>Responsabilidade</h3>
-            <p>Conteúdo e atendimento destinados apenas a maiores de 18 anos.</p>
-          </article>
-        </div>
-      </div>
+    <section class="mw-section" id="mw-featured-products">
+      <div class="mw-section__eyebrow">VITRINE COM PREÇO</div>
+      <h2 class="mw-section__title">Produtos em destaque</h2>
+      <p class="mw-section__text">Valores em padrão claro — de / por / no PIX / parcelado — para facilitar a consulta.</p>
+      <div id="mw-featured-grid" class="mw-price-grid"></div>
     </section>
 
     <section class="newsletter">
@@ -383,9 +176,7 @@
         <div>
           <p class="eyebrow">Novidades</p>
           <h2>Acompanhe ofertas e novidades pelo Instagram.</h2>
-          <p>
-            Veja publicações recentes, produtos disponíveis e informações do Mada Wine & Beer no perfil oficial.
-          </p>
+          <p>Veja publicações recentes, produtos disponíveis e informações do Mada Wine & Beer no perfil oficial.</p>
         </div>
 
         <a class="btn btn-gold" href="https://www.instagram.com/madawinebeer/" target="_blank" rel="noopener">
@@ -399,9 +190,7 @@
         <div>
           <p class="eyebrow">Contato</p>
           <h2>Fale com o Mada Wine & Beer</h2>
-          <p>
-            Consulte produtos, kits, disponibilidade, retirada e entrega pelo WhatsApp oficial.
-          </p>
+          <p>Consulte produtos, kits, disponibilidade, retirada e entrega pelo WhatsApp oficial.</p>
           <div class="business-info">
             <span>📍 Rua Benfica, 845 — Madalena, Recife</span>
             <span>📧 madabeer01@gmail.com</span>
@@ -410,43 +199,11 @@
 
         <div class="contact-buttons">
           <a class="btn btn-gold" href="https://wa.me/5581996787177?text=Ol%C3%A1%2C%20gostaria%20de%20consultar%20bebidas%2C%20kits%20e%20disponibilidade%20na%20Mada%20Wine%20%26%20Beer." target="_blank" rel="noopener">Chamar no WhatsApp</a>
-          <a class="btn btn-outline dark" href="https://madawin.com.br">madawin.com.br</a>
+          <a class="btn btn-outline dark" href="https://www.instagram.com/madawinebeer/" target="_blank" rel="noopener">Instagram</a>
         </div>
       </div>
     </section>
-  
-<section class="mw-section mw-section--soft" id="mw-best-offers">
-  <div class="mw-section__eyebrow">ESCOLHA A MELHOR OFERTA</div>
-  <h2 class="mw-section__title">Categorias com preço e consulta rápida</h2>
-  <p class="mw-section__text">Selecione a categoria para ver rótulos, valores e consultar disponibilidade diretamente no WhatsApp da Mada Wine & Beer.</p>
-
-  <form id="mw-home-search-form" class="mw-search-inline">
-    <input id="mw-home-search-input" type="search" placeholder="Busque por vinho, whisky, espumante, gin, vodka ou kit">
-    <button class="mw-btn mw-btn--solid" type="submit">Buscar</button>
-  </form>
-
-  <div id="mw-best-offers-grid" class="mw-grid-cats"></div>
-</section>
-
-<section class="mw-section" id="mw-carousel-section">
-  <div class="mw-section__eyebrow">SELEÇÃO COM FOTO</div>
-  <h2 class="mw-section__title">Destaques da loja</h2>
-  <p class="mw-section__text">Role para o lado e veja rótulos com foto real. Consulte e compre direto pelo WhatsApp.</p>
-  <div class="mw-carousel">
-    <button type="button" class="mw-carousel__nav mw-carousel__nav--prev" aria-label="Ver anteriores">‹</button>
-    <div class="mw-carousel__track" id="mw-carousel-track"></div>
-    <button type="button" class="mw-carousel__nav mw-carousel__nav--next" aria-label="Ver próximos">›</button>
-  </div>
-</section>
-
-<section class="mw-section" id="mw-featured-products">
-  <div class="mw-section__eyebrow">VITRINE COM PREÇO</div>
-  <h2 class="mw-section__title">Produtos em destaque</h2>
-  <p class="mw-section__text">Exibição de valores em padrão claro: de / por / parcelamento / crédito, para facilitar a consulta do cliente.</p>
-  <div id="mw-featured-grid" class="mw-price-grid"></div>
-</section>
-
-</main>
+  </main>
 
   <a class="whatsapp-float" href="https://wa.me/5581996787177?text=Ol%C3%A1%2C%20gostaria%20de%20consultar%20bebidas%2C%20kits%20e%20disponibilidade%20na%20Mada%20Wine%20%26%20Beer." target="_blank" rel="noopener" aria-label="Chamar Mada Wine & Beer no WhatsApp">
     <span class="whatsapp-bar-icon" aria-hidden="true">🍻</span>

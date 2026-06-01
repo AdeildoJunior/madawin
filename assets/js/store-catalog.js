@@ -261,14 +261,33 @@
     var list = PHOTO_SLUGS.map(function (s) { return bySlug[s]; }).filter(Boolean);
     if (!list.length) { var sec0 = document.getElementById("mw-carousel-section"); if (sec0) sec0.style.display = "none"; return; }
 
-    track.innerHTML = list.map(productCard).join("");
+    // Lista duplicada => loop contínuo (passa sozinho sem "rebobinar"), estilo casadabebida.
+    track.innerHTML = list.concat(list).map(productCard).join("");
 
     var sec  = document.getElementById("mw-carousel-section");
     var prev = sec && sec.querySelector(".mw-carousel__nav--prev");
     var next = sec && sec.querySelector(".mw-carousel__nav--next");
     function step() { return Math.max(248, track.clientWidth * 0.8); }
-    if (prev) prev.addEventListener("click", function () { track.scrollBy({ left: -step(), behavior: "smooth" }); });
-    if (next) next.addEventListener("click", function () { track.scrollBy({ left:  step(), behavior: "smooth" }); });
+
+    // Reseta de forma invisível ao passar da metade (as duas metades são iguais).
+    track.addEventListener("scroll", function () {
+      var half = track.scrollWidth / 2;
+      if (track.scrollLeft >= half) track.scrollLeft -= half;
+      else if (track.scrollLeft <= 0) track.scrollLeft += half;
+    });
+
+    // Auto-avanço com pausa no hover/toque.
+    var timer = null;
+    function advance() { track.scrollBy({ left: 266, behavior: "smooth" }); }
+    function play()  { if (!timer) timer = setInterval(advance, 3000); }
+    function pause() { if (timer) { clearInterval(timer); timer = null; } }
+    play();
+    ["mouseenter", "focusin", "touchstart"].forEach(function (ev) { track.addEventListener(ev, pause); });
+    ["mouseleave", "touchend"].forEach(function (ev) { track.addEventListener(ev, play); });
+
+    function manual(dir) { pause(); track.scrollBy({ left: dir * step(), behavior: "smooth" }); setTimeout(play, 6000); }
+    if (prev) prev.addEventListener("click", function () { manual(-1); });
+    if (next) next.addEventListener("click", function () { manual( 1); });
   }
 
   document.addEventListener("DOMContentLoaded", function(){
