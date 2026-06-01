@@ -1,0 +1,329 @@
+/* =====================================================================
+   MADA WINE & BEER — CAMADA DE MODERNIZAÇÃO VISUAL (carregada por último)
+   Tipografia, paleta, cards com FOTO real, hero e seções da home.
+   ===================================================================== */
+
+:root {
+  --mw-green-950: #04241a;
+  --mw-green-900: #07331f;
+  --mw-green-800: #0a4e30;
+  --mw-green-700: #0f6a3f;
+  --mw-gold: #e9b949;
+  --mw-gold-soft: #f6dd9a;
+  --mw-ink: #16201a;
+  --mw-muted: #5c6a60;
+  --mw-bg: #faf8f3;
+  --mw-card: #ffffff;
+  --mw-line: rgba(8, 51, 31, .10);
+  --mw-shadow-sm: 0 6px 20px rgba(8, 51, 31, .06);
+  --mw-shadow-md: 0 18px 44px rgba(8, 51, 31, .12);
+  --mw-radius: 20px;
+  --mw-font-head: "Poppins", "Inter", system-ui, sans-serif;
+  --mw-font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body {
+  font-family: var(--mw-font-body);
+  background: var(--mw-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3,
+.brand strong,
+.mw-section__title,
+.mw-cat-head h1,
+.hero-slide h1 {
+  font-family: var(--mw-font-head);
+  letter-spacing: -.02em;
+}
+
+/* ---------- BARRA DE TOPO E TICKER MAIS DISCRETOS ---------- */
+.top-warning {
+  background: var(--mw-green-950);
+  font-size: 12px;
+  letter-spacing: .01em;
+}
+
+.ticker {
+  background: linear-gradient(90deg, var(--mw-gold), var(--mw-gold-soft));
+  height: 34px;
+}
+
+/* ---------- HEADER ---------- */
+.site-header {
+  background: rgba(255, 255, 255, .9);
+  backdrop-filter: saturate(1.4) blur(16px);
+  border-bottom: 1px solid var(--mw-line);
+}
+
+.brand-shield {
+  background: linear-gradient(150deg, var(--mw-green-700), var(--mw-green-950));
+  border-color: rgba(233, 185, 73, .8);
+}
+
+.header-actions .gold-link {
+  background: var(--mw-green-800);
+}
+
+.nav-scroll a::after { background: var(--mw-gold); }
+
+/* =====================================================================
+   HERO — fundo com FOTO de ambiente real + overlay
+   ===================================================================== */
+.hero-slider {
+  background: var(--mw-green-950) !important;
+}
+
+.hero-slide {
+  background-size: cover !important;
+  background-position: center !important;
+  position: absolute !important;
+}
+
+.hero-slide::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, rgba(4, 36, 26, .92) 0%, rgba(4, 36, 26, .55) 55%, rgba(4, 36, 26, .15) 100%);
+  z-index: 0;
+}
+
+.hero-slide > * { position: relative; z-index: 1; }
+
+.slide-wine  { background-image: linear-gradient(0deg, rgba(4,36,26,.2), rgba(4,36,26,.2)), var(--mw-hero-wine); }
+.slide-beer  { background-image: linear-gradient(0deg, rgba(4,36,26,.2), rgba(4,36,26,.2)), var(--mw-hero-beer); }
+.slide-gift  { background-image: linear-gradient(0deg, rgba(4,36,26,.2), rgba(4,36,26,.2)), var(--mw-hero-gift); }
+
+:root {
+  --mw-hero-wine: url("/assets/img/hero/wine.jpg");
+  --mw-hero-beer: url("/assets/img/hero/beer.jpg");
+  --mw-hero-gift: url("/assets/img/hero/gift.jpg");
+}
+
+/* Esconde a "arte" de emoji gigante do hero — agora a foto é o fundo */
+.hero-art { display: none !important; }
+
+.hero-slide {
+  grid-template-columns: minmax(320px, 760px) 1fr !important;
+}
+
+.eyebrow { color: var(--mw-gold); }
+
+.btn-gold {
+  background: linear-gradient(135deg, var(--mw-gold), var(--mw-gold-soft));
+  color: var(--mw-green-950);
+}
+
+/* =====================================================================
+   CARDS DE PRODUTO COM PREÇO — foto real + layout moderno
+   ===================================================================== */
+.mw-price-card {
+  border: 1px solid var(--mw-line);
+  border-radius: var(--mw-radius);
+  box-shadow: var(--mw-shadow-sm);
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+
+.mw-price-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--mw-shadow-md);
+}
+
+/* Área da imagem: fundo claro neutro, ideal para foto de garrafa */
+.mw-price-card__image {
+  position: relative;
+  min-height: 0;
+  aspect-ratio: 1 / 1;
+  background: radial-gradient(circle at 50% 30%, #ffffff, #eef2ec 78%);
+  font-size: 0;
+  padding: 14px;
+  overflow: hidden;
+}
+
+/* A foto real do produto — sobreposta ao fallback, fundo opaco para cobri-lo */
+.mw-price-card__image img.mw-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 14px;
+  background: radial-gradient(circle at 50% 30%, #ffffff, #eef2ec 78%);
+  filter: drop-shadow(0 14px 20px rgba(8, 51, 31, .18));
+  transition: transform .3s ease;
+}
+
+.mw-price-card:hover .mw-price-card__image img.mw-photo {
+  transform: scale(1.05);
+}
+
+/* Fallback elegante quando ainda NÃO há foto (sempre presente, por baixo) */
+.mw-price-card__image .mw-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mw-muted);
+  letter-spacing: .02em;
+  text-align: center;
+  padding: 16px;
+}
+
+.mw-price-card__image .mw-fallback .mw-fallback__icon {
+  font-size: 46px;
+  opacity: .55;
+  filter: grayscale(.15);
+}
+
+.mw-price-card__image .mw-fallback small {
+  font-size: 11px;
+  font-weight: 600;
+  opacity: .7;
+}
+
+.mw-off-badge {
+  background: #d4000a;
+  box-shadow: 0 4px 12px rgba(212, 0, 10, .35);
+}
+
+.mw-price-card__name {
+  font-weight: 800;
+  min-height: 0;
+  margin-bottom: 2px;
+}
+
+.mw-main-price strong { color: var(--mw-green-800) !important; }
+
+.mw-btn--solid { background: var(--mw-green-800); }
+.mw-btn--line  { color: var(--mw-green-800); border-color: rgba(10, 78, 48, .3); }
+
+/* =====================================================================
+   CARDS DE CATEGORIA — ícone em "selo" moderno
+   ===================================================================== */
+.mw-category-card,
+.category-card {
+  border-radius: var(--mw-radius);
+  border: 1px solid var(--mw-line);
+  box-shadow: var(--mw-shadow-sm);
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+
+.mw-category-card:hover,
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--mw-shadow-md);
+}
+
+.mw-category-card__icon {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  font-size: 32px;
+  background: linear-gradient(150deg, var(--mw-gold-soft), #fff);
+  border: 1px solid var(--mw-line);
+  margin-bottom: 14px;
+}
+
+.category-card span {
+  display: inline-grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  margin: 0 auto 12px;
+  border-radius: 18px;
+  font-size: 30px;
+  background: linear-gradient(150deg, var(--mw-gold-soft), #fff);
+  border: 1px solid var(--mw-line);
+}
+
+/* =====================================================================
+   VITRINE DE DESTAQUES (home) — visual mais limpo
+   ===================================================================== */
+.product-visual {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 35%, #ffffff, #eef2ec 80%) !important;
+  font-size: 48px !important;
+  filter: drop-shadow(0 10px 14px rgba(8,51,31,.12));
+}
+
+.product-visual img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-card {
+  border-radius: var(--mw-radius);
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--mw-shadow-md);
+}
+
+/* =====================================================================
+   PROMOÇÕES — cartões mais sóbrios e modernos
+   ===================================================================== */
+.wide-promo-card {
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 85% 10%, rgba(255,255,255,.5), transparent 30%),
+    linear-gradient(150deg, #fff7e6, var(--mw-gold-soft));
+}
+
+.wide-promo-feature {
+  background:
+    linear-gradient(110deg, rgba(4,36,26,.95), rgba(10,78,48,.78)),
+    var(--mw-green-900);
+}
+
+.promo-emoji {
+  font-size: 70px;
+  opacity: .9;
+}
+
+/* =====================================================================
+   NEWSLETTER / RODAPÉ / CONTATO
+   ===================================================================== */
+.newsletter {
+  background: linear-gradient(135deg, var(--mw-green-950), var(--mw-green-800));
+}
+
+.site-footer { background: var(--mw-green-950); }
+
+.feature-box {
+  background: var(--mw-green-950);
+  border-color: rgba(233, 185, 73, .3);
+}
+
+/* =====================================================================
+   SIDEBAR FILTROS (subpáginas)
+   ===================================================================== */
+.mw-sidebar {
+  border-radius: var(--mw-radius);
+  border-color: var(--mw-line);
+}
+
+.mw-filter-chip.is-active {
+  background: var(--mw-green-800) !important;
+  border-color: var(--mw-green-800) !important;
+}
+
+/* =====================================================================
+   RESPONSIVO
+   ===================================================================== */
+@media (max-width: 560px) {
+  .mw-category-card__icon { width: 56px; height: 56px; font-size: 28px; }
+}

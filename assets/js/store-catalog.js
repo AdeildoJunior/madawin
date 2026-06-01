@@ -20,8 +20,18 @@
     const icon = (CATS[p.category] && CATS[p.category].icon) ? CATS[p.category].icon : "🍷";
     const off  = offPct(p.old_price, p.pix_price);
     const badge = off >= 5 ? '<div class="mw-off-badge">' + off + '% OFF</div>' : "";
+    const imgSrc = p.image || ("/assets/img/products/" + p.slug + ".jpg");
+    // Fallback elegante sempre presente; a foto real fica por cima e só
+    // aparece se carregar (senão o <img> se remove e mostra o fallback).
+    const visual = '<div class="mw-fallback">'
+      + '<span class="mw-fallback__icon">' + icon + '</span>'
+      + '<span>' + p.name + '</span>'
+      + '<small>Foto sob consulta</small>'
+      + '</div>'
+      + '<img class="mw-photo" src="' + imgSrc + '" alt="' + p.name.replace(/"/g, "&quot;") + '" '
+      + 'loading="lazy" onerror="this.remove();">';
     return '<article class="mw-price-card">'
-      + '<div class="mw-price-card__image">' + badge + icon + '</div>'
+      + '<div class="mw-price-card__image">' + badge + visual + '</div>'
       + '<div class="mw-price-card__body">'
       + '<div class="mw-price-card__name">' + p.name + '</div>'
       + '<div class="mw-price-card__meta">' + (p.tags || []).join(" • ") + '</div>'
