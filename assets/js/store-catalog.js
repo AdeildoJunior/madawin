@@ -272,7 +272,9 @@
     "bacardi-big-apple","smirnoff-998","smirnoff-ice-275","gin-larios-700","gin-rocks-1l",
     "heineken-long-330",
     "spaten-long-355","eisenbahn-pilsen","devassa-latao","weber-haus-premium","vinha-grande-tto",
-    "chandon-baby-brut","gin-intencion-morango"
+    "chandon-baby-brut","gin-intencion-morango",
+    "stella-long-330","budweiser-long-330","smirnoff-ice-269","smirnoff-ice-green-269",
+    "gin-intencion-maca","pitu-latao-473","campo-largo","rio-sol-moscatel","rio-sol-demi-sec"
   ];
 
   function buildCarousel() {
