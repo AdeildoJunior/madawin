@@ -77,6 +77,96 @@
     return new URLSearchParams(location.search).get(name) || "";
   }
 
+  function normalize(s) {
+    return String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  }
+
+  // Produtos cujo nome / categoria / tags contêm o termo buscado.
+  function searchProducts(q) {
+    var nq = normalize(q).trim();
+    if (!nq) return [];
+    return PRODUCTS.filter(function (p) {
+      var hay = normalize([p.name, p.category, (p.tags || []).join(" ")].join(" "));
+      return hay.indexOf(nq) !== -1;
+    });
+  }
+
+  // Decide para qual categoria mandar o usuário e navega.
+  function goSearch(q) {
+    var raw = (q || "").trim();
+    if (!raw) return;
+    var nq = normalize(raw);
+
+    // 1) Termo é o nome/slug de uma categoria -> abre a categoria inteira.
+    for (var slug in CATS) {
+      if (!CATS.hasOwnProperty(slug)) continue;
+      if (normalize(slug).indexOf(nq) !== -1 || normalize(CATS[slug].title).indexOf(nq) !== -1) {
+        location.href = "/" + slug + "/";
+        return;
+      }
+    }
+
+    // 2) Termo casa com produtos -> abre a categoria com mais resultados, já filtrada.
+    var matches = searchProducts(raw);
+    if (matches.length) {
+      var counts = {};
+      matches.forEach(function (p) { counts[p.category] = (counts[p.category] || 0) + 1; });
+      var best = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; })[0];
+      location.href = "/" + best + "/?q=" + encodeURIComponent(raw);
+      return;
+    }
+
+    // 3) Sem resultados -> leva a vinhos com o termo (a página mostra "0 produtos").
+    location.href = "/vinhos/?q=" + encodeURIComponent(raw);
+  }
+
+  // Autocomplete da barra de busca do topo (#productSearch / #searchResults).
+  function wireHeaderSearch() {
+    var form    = document.getElementById("productSearchForm");
+    var input   = document.getElementById("productSearch");
+    var results = document.getElementById("searchResults");
+    if (!form || !input) return;
+
+    function close() { if (results) { results.classList.remove("is-open"); results.innerHTML = ""; } }
+
+    function render() {
+      if (!results) return;
+      var q = input.value.trim();
+      if (!q) { close(); return; }
+      var list = searchProducts(q).slice(0, 8);
+      if (!list.length) {
+        results.innerHTML = '<div class="search-empty">Nenhum item encontrado. Tente vinho, cerveja, whisky, gin...</div>';
+        results.classList.add("is-open");
+        return;
+      }
+      results.innerHTML = list.map(function (p) {
+        var icon = (CATS[p.category] && CATS[p.category].icon) || "🍷";
+        var title = (CATS[p.category] && CATS[p.category].title) || p.category;
+        return '<button type="button" class="search-result-item" data-slug="' + p.slug + '" data-cat="' + p.category + '">'
+          + '<span>' + icon + '</span>'
+          + '<span><strong>' + p.name + '</strong><small>' + title + '</small></span>'
+          + '</button>';
+      }).join("");
+      results.querySelectorAll("[data-slug]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var prod = list.filter(function (p) { return p.slug === btn.dataset.slug; })[0];
+          location.href = "/" + btn.dataset.cat + "/?q=" + encodeURIComponent(prod ? prod.name : input.value);
+        });
+      });
+      results.classList.add("is-open");
+    }
+
+    input.addEventListener("input", render);
+    input.addEventListener("focus", render);
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      goSearch(input.value);
+    });
+    document.addEventListener("click", function (e) {
+      if (!e.target.closest(".search-box")) close();
+    });
+  }
+
   function buildHome() {
     var best = document.getElementById("mw-best-offers-grid");
     var feat = document.getElementById("mw-featured-grid");
@@ -94,8 +184,7 @@
     if (form && input) {
       form.addEventListener("submit", function(e){
         e.preventDefault();
-        var q = input.value.trim();
-        if (q) location.href = "/vinhos/?q=" + encodeURIComponent(q);
+        goSearch(input.value);
       });
     }
   }
@@ -154,6 +243,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", function(){
+    wireHeaderSearch();
     buildHome();
     buildCategoryPage();
   });
