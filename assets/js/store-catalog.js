@@ -270,7 +270,9 @@
     "luigi-bosca-malbec","terrazas-malbec","terrazas-syrah","esporao-reserva","casillero-diablo-pedro",
     "casal-garcia-sweet","verde-casal-garcia","sea-sun-rose","aperol-750","bacardi-branca-980",
     "bacardi-big-apple","smirnoff-998","smirnoff-ice-275","gin-larios-700","gin-rocks-1l",
-    "heineken-long-330"
+    "heineken-long-330",
+    "spaten-long-355","eisenbahn-pilsen","devassa-latao","weber-haus-premium","vinha-grande-tto",
+    "chandon-baby-brut","gin-intencion-morango"
   ];
 
   function buildCarousel() {

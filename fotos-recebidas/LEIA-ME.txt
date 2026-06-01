@@ -1,0 +1,12 @@
+Jogue aqui as fotos dos produtos (qualquer nome de arquivo serve).
+
+Eu (Claude) vou:
+  - identificar a qual produto cada foto pertence,
+  - renomear pelo "slug" certo,
+  - padronizar (fundo branco, recorte quadrado),
+  - mover para assets/img/products/ (onde aparecem sozinhas no site).
+
+Se conseguir, ajuda muito mandar uma foto por produto, garrafa/lata
+centralizada e fundo claro. Mas pode mandar do jeito que tiver — eu ajusto.
+
+Lista do que falta: ver FOTOS-QUE-FALTAM.md na raiz do projeto.
