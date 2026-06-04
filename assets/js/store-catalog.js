@@ -69,8 +69,6 @@
       + '<div class="mw-price-block">'
       + (p.old_price ? '<div class="mw-old-price">De: ' + brl(p.old_price) + '</div>' : "")
       + '<div class="mw-main-price">por: <strong>' + brl(p.pix_price) + '</strong> <span>no PIX</span></div>'
-      + (p.installments ? '<div class="mw-installments">ou ' + p.installments + ' no cartão</div>' : "")
-      + (p.credit_price ? '<div class="mw-credit">' + p.credit_price + '</div>' : "")
       + '</div>'
       + '<div class="mw-card-actions">'
       + '<a class="mw-btn mw-btn--ifood" href="' + IFOOD_URL + '" target="_blank" rel="noopener">🛒 Comprar no iFood</a>'
