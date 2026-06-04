@@ -251,7 +251,7 @@ a {
   justify-content: center;
   gap: 22px;
   overflow-x: auto;
-  padding: 13px 0;
+  padding: 8px 0;
   font-weight: 800;
   font-size: 14px;
   color: var(--green-950);
