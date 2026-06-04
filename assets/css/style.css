@@ -212,12 +212,14 @@ a {
   color: var(--muted);
 }
 
-.search-box button {
+/* Apenas o botão de enviar (filho direto do form), nunca os itens do
+   dropdown de resultados, que também são <button> dentro do .search-box. */
+.search-box > button {
   width: 54px;
   height: 46px;
   border: 0;
   background: transparent;
-  cursor: default;
+  cursor: pointer;
 }
 
 .header-actions {
@@ -1431,6 +1433,9 @@ body {
 
 .search-box {
   position: relative !important;
+  /* Sem isto o overflow:hidden do pill cortava o dropdown no desktop.
+     Input e botão são transparentes, então o pill continua arredondado. */
+  overflow: visible !important;
 }
 
 .search-box input:not(:disabled) {
@@ -1459,36 +1464,63 @@ body {
 
 .search-result-item {
   display: grid;
-  grid-template-columns: 38px 1fr auto;
-  gap: 10px;
+  grid-template-columns: 40px 1fr;
+  gap: 12px;
   align-items: center;
   width: 100%;
+  min-height: 52px;
+  box-sizing: border-box;
   border: 0;
   background: transparent;
-  padding: 10px;
+  padding: 9px 12px;
   border-radius: 13px;
   text-align: left;
   cursor: pointer;
   color: var(--green-950);
+  font-family: inherit;
 }
 
-.search-result-item:hover {
+.search-result-item + .search-result-item {
+  margin-top: 2px;
+}
+
+.search-result-item:hover,
+.search-result-item:focus-visible {
   background: #f3f5f0;
+  outline: none;
 }
 
 .search-result-item span:first-child {
   font-size: 24px;
+  line-height: 1;
+  text-align: center;
+}
+
+/* Coluna de texto: precisa de min-width:0 para o ellipsis funcionar no grid */
+.search-result-item > span:nth-child(2) {
+  min-width: 0;
+  display: block;
 }
 
 .search-result-item strong {
   display: block;
   font-size: 14px;
+  line-height: 1.25;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .search-result-item small {
   display: block;
-  color: var(--muted);
   margin-top: 2px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .search-result-item em {
@@ -1496,6 +1528,13 @@ body {
   font-size: 12px;
   color: var(--green-800);
   font-weight: 900;
+}
+
+.search-empty {
+  padding: 14px 14px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
 }
 
 .nav-scroll {
@@ -1762,10 +1801,11 @@ body {
   }
 
   .search-results {
-    position: fixed;
-    left: 12px;
-    right: 12px;
-    top: 150px;
+    /* Ancorado logo abaixo da busca (herda position:absolute da base),
+       em vez de um top fixo que desencaixava do campo. */
+    top: calc(100% + 6px);
+    max-height: 60vh;
+    border-radius: 14px;
   }
 }
 
@@ -1901,8 +1941,8 @@ body {
   .brand strong { font-size: 15px; }
   .brand small  { display: none; }
 
-  .search-box input  { font-size: 14px; padding: 0 14px; }
-  .search-box button { width: 44px; height: 40px; }
+  .search-box input    { font-size: 14px; padding: 0 14px; }
+  .search-box > button { width: 44px; height: 40px; }
 
   /* Botões compactos e do mesmo tamanho, um sobre o outro */
   .header-actions a {

@@ -99,6 +99,16 @@
     return String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
   }
 
+  // Escapa texto para inserção segura no HTML do dropdown (evita quebra de layout).
+  function esc(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
   // Produtos cujo nome / categoria / tags contêm o termo buscado.
   function searchProducts(q) {
     var nq = normalize(q).trim();
@@ -160,9 +170,9 @@
       results.innerHTML = list.map(function (p) {
         var icon = (CATS[p.category] && CATS[p.category].icon) || "🍷";
         var title = (CATS[p.category] && CATS[p.category].title) || p.category;
-        return '<button type="button" class="search-result-item" data-slug="' + p.slug + '" data-cat="' + p.category + '">'
+        return '<button type="button" class="search-result-item" data-slug="' + esc(p.slug) + '" data-cat="' + esc(p.category) + '">'
           + '<span>' + icon + '</span>'
-          + '<span><strong>' + p.name + '</strong><small>' + title + '</small></span>'
+          + '<span><strong>' + esc(p.name) + '</strong><small>' + esc(title) + '</small></span>'
           + '</button>';
       }).join("");
       results.querySelectorAll("[data-slug]").forEach(function (btn) {
