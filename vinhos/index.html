@@ -12,6 +12,17 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap">
   <link rel="stylesheet" href="/assets/css/store-catalog.css">
   <link rel="stylesheet" href="/assets/css/modern.css">
+
+<style id="mw-header-logo-style">
+.mw-header-logo-img{
+  width: 56px !important;
+  height: 56px !important;
+  object-fit: contain !important;
+  display: block !important;
+  border-radius: 12px !important;
+}
+</style>
+
 </head>
 <body data-category="vinhos">
 
@@ -91,5 +102,49 @@
 
   <script src="/assets/js/store-data.js"></script>
   <script src="/assets/js/store-catalog.js"></script>
+
+<script id="mw-header-logo-script">
+document.addEventListener('DOMContentLoaded', function () {
+  const logoPath = '/assets/img/madawin-logo.png';
+
+  const titleEl = Array.from(document.querySelectorAll('body *'))
+    .find(el => (el.textContent || '').trim() === 'Mada Wine & Beer');
+
+  if (!titleEl) return;
+
+  const scope =
+    titleEl.closest('header, nav, .header, .navbar, .topbar, .site-header') ||
+    titleEl.parentElement?.parentElement ||
+    document.body;
+
+  const candidates = Array.from(scope.querySelectorAll('*')).filter(el => {
+    const txt = (el.textContent || '').trim();
+    const r = el.getBoundingClientRect();
+    return txt === 'M' && r.width >= 20 && r.height >= 20 && r.width <= 120 && r.height <= 120;
+  });
+
+  const pick = candidates[0];
+  if (!pick || pick.querySelector('.mw-header-logo-img')) return;
+
+  pick.textContent = '';
+  pick.innerHTML = '<img src="' + logoPath + '" alt="Mada Wine & Beer" class="mw-header-logo-img">';
+
+  pick.style.width = '56px';
+  pick.style.height = '56px';
+  pick.style.display = 'flex';
+  pick.style.alignItems = 'center';
+  pick.style.justifyContent = 'center';
+  pick.style.background = 'transparent';
+  pick.style.border = 'none';
+  pick.style.boxShadow = 'none';
+  pick.style.overflow = 'visible';
+
+  const parent = pick.parentElement;
+  if (parent && !parent.style.gap) {
+    parent.style.gap = '12px';
+  }
+});
+</script>
+
 </body>
 </html>
