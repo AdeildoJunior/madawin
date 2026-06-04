@@ -32,36 +32,15 @@
   </script>
 
 
-
-
-
-<style id="mw-real-logo-style">
-.mw-real-logo-img{
-  width: 112px !important;
-  height: 112px !important;
+<style id="mw-header-logo-style">
+.mw-header-logo-img{
+  width: 56px !important;
+  height: 56px !important;
   object-fit: contain !important;
   display: block !important;
-  border-radius: 18px !important;
-}
-.mw-logo-replaced{
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  overflow: visible !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 118px !important;
-  min-width: 118px !important;
-  height: 118px !important;
+  border-radius: 12px !important;
 }
 </style>
-
-
-
-
-
-
 
 </head>
 
@@ -287,67 +266,48 @@
 </footer>
 
 
+<script id="mw-header-logo-script">
+document.addEventListener('DOMContentLoaded', function () {
+  const logoPath = '/assets/img/madawin-logo.png';
 
+  const titleEl = Array.from(document.querySelectorAll('body *'))
+    .find(el => (el.textContent || '').trim() === 'Mada Wine & Beer');
 
+  if (!titleEl) return;
 
-<script id="mw-real-logo-script">
-(function(){
-  function replaceLogo(){
-    const logoPath = '/assets/img/madawin-logo.png?v=2';
+  const scope =
+    titleEl.closest('header, nav, .header, .navbar, .topbar, .site-header') ||
+    titleEl.parentElement?.parentElement ||
+    document.body;
 
-    const header =
-      document.querySelector('header') ||
-      document.querySelector('.site-header') ||
-      document.querySelector('.header') ||
-      document.querySelector('.topbar') ||
-      document.body;
+  const candidates = Array.from(scope.querySelectorAll('*')).filter(el => {
+    const txt = (el.textContent || '').trim();
+    const r = el.getBoundingClientRect();
+    return txt === 'M' && r.width >= 20 && r.height >= 20 && r.width <= 120 && r.height <= 120;
+  });
 
-    const all = Array.from(header.querySelectorAll('*'));
+  const pick = candidates[0];
+  if (!pick || pick.querySelector('.mw-header-logo-img')) return;
 
-    const possible = all.filter(el => {
-      const text = (el.textContent || '').trim();
-      const r = el.getBoundingClientRect();
-      const style = window.getComputedStyle(el);
+  pick.textContent = '';
+  pick.innerHTML = '<img src="' + logoPath + '" alt="Mada Wine & Beer" class="mw-header-logo-img">';
 
-      return (
-        text === 'M' &&
-        r.top >= 0 &&
-        r.top < 180 &&
-        r.width >= 24 &&
-        r.width <= 90 &&
-        r.height >= 24 &&
-        r.height <= 90 &&
-        style.display !== 'none' &&
-        style.visibility !== 'hidden'
-      );
-    });
+  pick.style.width = '56px';
+  pick.style.height = '56px';
+  pick.style.display = 'flex';
+  pick.style.alignItems = 'center';
+  pick.style.justifyContent = 'center';
+  pick.style.background = 'transparent';
+  pick.style.border = 'none';
+  pick.style.boxShadow = 'none';
+  pick.style.overflow = 'visible';
 
-    const target = possible[0];
-
-    if (!target) {
-      console.log('Mada logo: monograma M não encontrado no cabeçalho');
-      return;
-    }
-
-    if (target.querySelector('.mw-real-logo-img')) return;
-
-    target.classList.add('mw-logo-replaced');
-    target.innerHTML = '<img class="mw-real-logo-img" src="' + logoPath + '" alt="Mada Wine & Beer">';
+  const parent = pick.parentElement;
+  if (parent && !parent.style.gap) {
+    parent.style.gap = '12px';
   }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', replaceLogo);
-  } else {
-    replaceLogo();
-  }
-
-  setTimeout(replaceLogo, 500);
-  setTimeout(replaceLogo, 1500);
-})();
+});
 </script>
-
-
-
 
 </body>
 </html>

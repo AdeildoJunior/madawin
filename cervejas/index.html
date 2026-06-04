@@ -39,87 +39,11 @@
 </style>
 
 
-<style id="mw-mobile-header-tune-style">
-@media (max-width: 768px) {
-  .mw-real-logo-img{
-    width: 84px !important;
-    height: 84px !important;
-    border-radius: 14px !important;
-  }
-
-  .mw-logo-replaced{
-    width: 90px !important;
-    min-width: 90px !important;
-    height: 90px !important;
-    margin-left: 0 !important;
-    margin-right: 8px !important;
-  }
-
-  .mw-mobile-brand-row{
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    gap: 8px !important;
-    padding-left: 8px !important;
-    padding-right: 8px !important;
-    flex-wrap: nowrap !important;
-  }
-
-  .mw-mobile-title-wrap{
-    min-width: 0 !important;
-    flex: 1 1 auto !important;
-  }
-
-  .mw-mobile-title{
-    font-size: 16px !important;
-    line-height: 1.15 !important;
-    margin: 0 !important;
-    white-space: normal !important;
-  }
-
-  .mw-mobile-domain{
-    display: none !important;
-  }
-
-  .mw-mobile-actions{
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    flex-wrap: nowrap !important;
-    margin-left: auto !important;
-  }
-
-  .mw-mobile-instagram,
-  .mw-mobile-whatsapp{
-    font-size: 13px !important;
-    line-height: 1 !important;
-    padding: 10px 14px !important;
-    border-radius: 999px !important;
-    white-space: nowrap !important;
-    min-height: auto !important;
-  }
-
-  .mw-mobile-instagram{
-    max-width: 132px !important;
-  }
-
-  .mw-mobile-whatsapp{
-    max-width: 118px !important;
-  }
-
-  .mw-mobile-instagram img,
-  .mw-mobile-instagram svg,
-  .mw-mobile-whatsapp img,
-  .mw-mobile-whatsapp svg{
-    width: 18px !important;
-    height: 18px !important;
-  }
-}
-</style>
 
 
-<link id="mw-age-gate-css" rel="stylesheet" href="/assets/css/age-gate-fix.css?v=2">
-<script id="mw-age-gate-fix" src="/assets/js/age-gate-fix.js?v=2" defer></script>
+
+
+
 </head>
 <body data-category="cervejas">
 
@@ -260,89 +184,7 @@
 </script>
 
 
-<script id="mw-mobile-header-tune-script">
-(function(){
-  function findByText(selector, text){
-    return Array.from(document.querySelectorAll(selector)).find(el => {
-      return (el.textContent || '').trim() === text;
-    });
-  }
 
-  function tuneHeader(){
-    if (window.innerWidth > 768) return;
-
-    const logoImg = document.querySelector('.mw-real-logo-img');
-    const logoBox = logoImg ? logoImg.closest('.mw-logo-replaced') : null;
-
-    const titleEl = Array.from(document.querySelectorAll('body *')).find(el =>
-      (el.textContent || '').trim() === 'Mada Wine & Beer'
-    );
-
-    const domainEl = Array.from(document.querySelectorAll('body *')).find(el =>
-      (el.textContent || '').trim() === 'madawin.com.br'
-    );
-
-    const igEl = Array.from(document.querySelectorAll('a,button,div,span')).find(el =>
-      ((el.textContent || '').trim() === 'Instagram')
-    );
-
-    const waEl = Array.from(document.querySelectorAll('a,button,div,span')).find(el =>
-      ((el.textContent || '').trim() === 'WhatsApp')
-    );
-
-    if (titleEl) {
-      titleEl.classList.add('mw-mobile-title');
-      const titleWrap = titleEl.parentElement;
-      if (titleWrap) titleWrap.classList.add('mw-mobile-title-wrap');
-    }
-
-    if (domainEl) domainEl.classList.add('mw-mobile-domain');
-
-    const igBtn = igEl ? (igEl.closest('a,button') || igEl) : null;
-    const waBtn = waEl ? (waEl.closest('a,button') || waEl) : null;
-
-    if (igBtn) igBtn.classList.add('mw-mobile-instagram');
-    if (waBtn) waBtn.classList.add('mw-mobile-whatsapp');
-
-    const brandRow =
-      (titleEl && titleEl.closest('header, .header, .site-header, .topbar')) ||
-      (titleEl && titleEl.parentElement && titleEl.parentElement.parentElement) ||
-      null;
-
-    if (brandRow) {
-      brandRow.classList.add('mw-mobile-brand-row');
-    } else if (logoBox && titleEl) {
-      const maybeRow = logoBox.parentElement;
-      if (maybeRow) maybeRow.classList.add('mw-mobile-brand-row');
-    }
-
-    if (logoBox) {
-      logoBox.style.marginLeft = '0';
-      logoBox.style.marginRight = '8px';
-    }
-
-    if (igBtn && waBtn) {
-      const parent = igBtn.parentElement;
-      if (parent && (parent.contains(waBtn) || waBtn.parentElement === parent)) {
-        parent.classList.add('mw-mobile-actions');
-      } else {
-        const common = igBtn.parentElement;
-        if (common) common.classList.add('mw-mobile-actions');
-      }
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', tuneHeader);
-  } else {
-    tuneHeader();
-  }
-
-  window.addEventListener('load', tuneHeader);
-  setTimeout(tuneHeader, 300);
-  setTimeout(tuneHeader, 1200);
-})();
-</script>
 
 </body>
 </html>
