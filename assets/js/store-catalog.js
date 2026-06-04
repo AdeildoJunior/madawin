@@ -170,9 +170,14 @@
       results.innerHTML = list.map(function (p) {
         var icon = (CATS[p.category] && CATS[p.category].icon) || "🍷";
         var title = (CATS[p.category] && CATS[p.category].title) || p.category;
+        var img = p.image || ("/assets/img/products/" + p.slug + ".jpg");
+        // Foto real por cima; se não carregar, ela se remove e o emoji aparece.
         return '<button type="button" class="search-result-item" data-slug="' + esc(p.slug) + '" data-cat="' + esc(p.category) + '">'
-          + '<span>' + icon + '</span>'
-          + '<span><strong>' + esc(p.name) + '</strong><small>' + esc(title) + '</small></span>'
+          + '<span class="mw-sr-thumb">'
+          +   '<span class="mw-sr-emoji" aria-hidden="true">' + icon + '</span>'
+          +   '<img class="mw-sr-img" src="' + esc(img) + '" alt="" loading="lazy" onerror="this.remove();">'
+          + '</span>'
+          + '<span class="mw-sr-text"><strong>' + esc(p.name) + '</strong><small>' + esc(title) + '</small></span>'
           + '</button>';
       }).join("");
       results.querySelectorAll("[data-slug]").forEach(function (btn) {
