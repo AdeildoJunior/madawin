@@ -1881,7 +1881,15 @@ body {
   }
 
   .brand          { grid-area: brand; gap: 9px; }
-  .header-actions { grid-area: actions; flex-wrap: nowrap; gap: 6px; }
+  /* Ações empilhadas: Instagram em cima, WhatsApp embaixo */
+  .header-actions {
+    grid-area: actions;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 6px;
+    flex: 0 0 auto;
+  }
   .search-box     { grid-area: search; height: 40px; }
 
   .brand-shield {
@@ -1896,12 +1904,19 @@ body {
   .search-box input  { font-size: 14px; padding: 0 14px; }
   .search-box button { width: 44px; height: 40px; }
 
-  /* Ações compactas; Instagram fica só com o ícone */
-  .header-actions a { padding: 8px 13px; font-size: 13px; }
+  /* Botões compactos e do mesmo tamanho, um sobre o outro */
+  .header-actions a {
+    padding: 7px 14px;
+    font-size: 12.5px;
+    text-align: center;
+    white-space: nowrap;
+    line-height: 1.1;
+  }
   .instagram-top {
-    font-size: 0;          /* esconde o texto, mantém o ícone */
-    gap: 0;
-    padding: 8px 11px;
+    font-size: 12.5px;     /* mostra o texto do link de novo */
+    gap: 6px;
+    padding: 7px 14px;
+    justify-content: center;
   }
 
   /* Menu de categorias: faixa fina rolável em uma única linha */
