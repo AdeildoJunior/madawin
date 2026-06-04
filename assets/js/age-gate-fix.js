@@ -1,186 +1,162 @@
 (function () {
-  const ACCEPT_KEY = 'madawin_age_ok';
+  const KEY = 'madawin_age_ok';
   const EXIT_URL = 'https://www.google.com/';
 
-  function norm(s) {
-    return (s || '')
-      .toString()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase()
-      .replace(/\s+/g, ' ')
-      .trim();
+  function accepted() {
+    try {
+      return localStorage.getItem(KEY) === '1';
+    } catch (e) {
+      return false;
+    }
   }
 
-  function clearOldAgeKeys() {
-    const rx = /(age|idade|maior|adult|18|verify|verified)/i;
+  function accept() {
     try {
-      Object.keys(localStorage).forEach(k => {
-        if (rx.test(k)) localStorage.removeItem(k);
-      });
-      Object.keys(sessionStorage).forEach(k => {
-        if (rx.test(k)) sessionStorage.removeItem(k);
-      });
-    } catch (e) {}
-  }
-
-  function setAccepted() {
-    try {
-      localStorage.setItem(ACCEPT_KEY, '1');
-
-      // Compatibilidade com possíveis scripts antigos do site
+      localStorage.setItem(KEY, '1');
       localStorage.setItem('ageVerified', 'true');
       localStorage.setItem('over18', 'true');
       localStorage.setItem('isAdult', 'true');
       localStorage.setItem('maior18', 'true');
       localStorage.setItem('madawin_age_verified', 'true');
     } catch (e) {}
+
+    hideAllAgeOverlays();
+    document.documentElement.classList.remove('mw-age-lock');
+    document.body.classList.remove('mw-age-lock');
   }
 
-  function isAccepted() {
+  function deny() {
     try {
-      return localStorage.getItem(ACCEPT_KEY) === '1';
-    } catch (e) {
-      return false;
-    }
-  }
-
-  function looksLikeAgeText(t) {
-    t = norm(t);
-    return (
-      t.includes('18') &&
-      (
-        t.includes('maior') ||
-        t.includes('idade') ||
-        t.includes('anos') ||
-        t.includes('bebida') ||
-        t.includes('alcool')
-      )
-    );
-  }
-
-  function isYesButton(el) {
-    const t = norm(el.innerText || el.textContent || el.value || el.getAttribute('aria-label'));
-    return (
-      (t.includes('tenho') && t.includes('18')) ||
-      (t.includes('sou maior') && t.includes('18')) ||
-      t === 'sim' ||
-      t.includes('entrar')
-    );
-  }
-
-  function isNoButton(el) {
-    const t = norm(el.innerText || el.textContent || el.value || el.getAttribute('aria-label'));
-    return (
-      (t.includes('nao') && t.includes('18')) ||
-      t.includes('nao tenho') ||
-      t.includes('sou menor') ||
-      t === 'nao'
-    );
-  }
-
-  function findGateRoot(fromEl) {
-    let el = fromEl;
-    while (el && el !== document.body) {
-      const tx = el.innerText || el.textContent || '';
-      const st = window.getComputedStyle(el);
-      const cls = norm((el.className || '').toString() + ' ' + (el.id || ''));
-
-      if (
-        looksLikeAgeText(tx) &&
-        (
-          st.position === 'fixed' ||
-          st.position === 'absolute' ||
-          cls.includes('modal') ||
-          cls.includes('overlay') ||
-          cls.includes('age') ||
-          cls.includes('idade') ||
-          cls.includes('gate') ||
-          cls.includes('popup')
-        )
-      ) {
-        return el;
-      }
-
-      el = el.parentElement;
-    }
-
-    return null;
-  }
-
-  function hideAgeGate() {
-    const buttons = Array.from(document.querySelectorAll('button, a, [role="button"], input[type="button"], input[type="submit"]'));
-
-    buttons.forEach(btn => {
-      if (!isYesButton(btn) && !isNoButton(btn)) return;
-
-      const root = findGateRoot(btn);
-      if (root) {
-        root.style.setProperty('display', 'none', 'important');
-        root.style.setProperty('visibility', 'hidden', 'important');
-        root.style.setProperty('opacity', '0', 'important');
-        root.style.setProperty('pointer-events', 'none', 'important');
-      }
-    });
-
-    document.documentElement.style.overflow = '';
-    document.body.style.overflow = '';
-    document.body.classList.remove('modal-open', 'no-scroll', 'overflow-hidden');
-  }
-
-  function denyAccess() {
-    try {
-      localStorage.removeItem(ACCEPT_KEY);
-      sessionStorage.removeItem(ACCEPT_KEY);
+      localStorage.removeItem(KEY);
+      localStorage.removeItem('ageVerified');
+      localStorage.removeItem('over18');
+      localStorage.removeItem('isAdult');
+      localStorage.removeItem('maior18');
+      localStorage.removeItem('madawin_age_verified');
     } catch (e) {}
 
     window.location.href = EXIT_URL;
   }
 
-  function boot() {
+  function clearOnReset() {
     const params = new URLSearchParams(window.location.search);
+    if (!params.has('resetAge')) return;
 
-    if (params.has('resetAge')) {
-      clearOldAgeKeys();
+    try {
+      localStorage.removeItem(KEY);
+      localStorage.removeItem('ageVerified');
+      localStorage.removeItem('over18');
+      localStorage.removeItem('isAdult');
+      localStorage.removeItem('maior18');
+      localStorage.removeItem('madawin_age_verified');
+      sessionStorage.clear();
+    } catch (e) {}
+  }
+
+  function isOldAgeOverlay(el) {
+    if (!el || el.id === 'mw-age-gate-v2') return false;
+
+    const text = (el.innerText || el.textContent || '').toLowerCase();
+
+    return (
+      text.includes('maiores de 18') ||
+      text.includes('maior de 18') ||
+      text.includes('tenho 18') ||
+      text.includes('bebidas alcoólicas') ||
+      text.includes('bebidas alcoolicas')
+    );
+  }
+
+  function hideAllAgeOverlays() {
+    Array.from(document.body.querySelectorAll('*')).forEach(el => {
+      if (el.id === 'mw-age-gate-v2') return;
+
+      const st = window.getComputedStyle(el);
+      const fixedOrOverlay =
+        st.position === 'fixed' ||
+        st.position === 'absolute' ||
+        (el.className || '').toString().toLowerCase().includes('modal') ||
+        (el.className || '').toString().toLowerCase().includes('overlay') ||
+        (el.className || '').toString().toLowerCase().includes('age') ||
+        (el.className || '').toString().toLowerCase().includes('idade');
+
+      if (fixedOrOverlay && isOldAgeOverlay(el)) {
+        el.style.setProperty('display', 'none', 'important');
+        el.style.setProperty('visibility', 'hidden', 'important');
+        el.style.setProperty('opacity', '0', 'important');
+        el.style.setProperty('pointer-events', 'none', 'important');
+      }
+    });
+
+    const gate = document.getElementById('mw-age-gate-v2');
+    if (gate) gate.remove();
+
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+  }
+
+  function makeGate() {
+    if (accepted()) {
+      hideAllAgeOverlays();
+      return;
     }
 
-    if (isAccepted()) {
-      hideAgeGate();
+    document.documentElement.classList.add('mw-age-lock');
+    document.body.classList.add('mw-age-lock');
+
+    Array.from(document.body.querySelectorAll('*')).forEach(el => {
+      if (el.id !== 'mw-age-gate-v2' && isOldAgeOverlay(el)) {
+        el.style.setProperty('display', 'none', 'important');
+      }
+    });
+
+    let gate = document.getElementById('mw-age-gate-v2');
+    if (gate) return;
+
+    gate = document.createElement('div');
+    gate.id = 'mw-age-gate-v2';
+    gate.innerHTML = `
+      <div class="mw-age-card-v2" role="dialog" aria-modal="true" aria-labelledby="mw-age-title-v2">
+        <img class="mw-age-logo-v2" src="/assets/img/madawin-logo.png?v=age2" alt="Mada Wine & Beer">
+        <h2 id="mw-age-title-v2">Mada Wine & Beer</h2>
+        <p class="mw-age-main-v2">
+          Este site apresenta conteúdo relacionado a bebidas alcoólicas e é destinado apenas a maiores de 18 anos.
+        </p>
+        <p class="mw-age-note-v2">
+          Venda e consumo de bebidas alcoólicas proibidos para menores de 18 anos. Beba com responsabilidade.
+        </p>
+        <div class="mw-age-actions-v2">
+          <button type="button" id="mw-age-yes-v2">Tenho 18 anos ou mais</button>
+          <button type="button" id="mw-age-no-v2">Não tenho 18 anos</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(gate);
+
+    document.getElementById('mw-age-yes-v2').addEventListener('click', function (e) {
+      e.preventDefault();
+      accept();
+    });
+
+    document.getElementById('mw-age-no-v2').addEventListener('click', function (e) {
+      e.preventDefault();
+      deny();
+    });
+  }
+
+  function boot() {
+    clearOnReset();
+
+    if (accepted()) {
+      hideAllAgeOverlays();
+      return;
     }
 
-    document.addEventListener('click', function (ev) {
-      const btn = ev.target.closest('button, a, [role="button"], input[type="button"], input[type="submit"]');
-      if (!btn) return;
+    makeGate();
 
-      if (isYesButton(btn)) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        ev.stopImmediatePropagation();
-
-        setAccepted();
-        hideAgeGate();
-
-        return false;
-      }
-
-      if (isNoButton(btn)) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        ev.stopImmediatePropagation();
-
-        denyAccess();
-
-        return false;
-      }
-    }, true);
-
-    setTimeout(function () {
-      if (isAccepted()) hideAgeGate();
-    }, 300);
-
-    setTimeout(function () {
-      if (isAccepted()) hideAgeGate();
-    }, 1200);
+    setTimeout(makeGate, 500);
+    setTimeout(makeGate, 1500);
   }
 
   if (document.readyState === 'loading') {
@@ -188,4 +164,6 @@
   } else {
     boot();
   }
+
+  window.addEventListener('load', boot);
 })();
