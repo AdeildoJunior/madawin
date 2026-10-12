@@ -47,31 +47,50 @@
     return WA_BASE + encodeURIComponent("Olá! Tenho uma dúvida sobre: " + name + " — Mada Wine & Beer");
   }
 
+  // Produto sem estoque na tabela do proprietário: segue visível (com foto),
+  // mas recebe selo "Indisponível" e perde o botão de compra.
+  function isOut(p) {
+    return p.available === false;
+  }
+
+  // Indisponível vai sempre para o fim de qualquer listagem, preservando a
+  // ordem relativa original dentro de cada grupo (ordenação estável).
+  function availableFirst(list) {
+    var ok = [], out = [];
+    list.forEach(function (p) { (isOut(p) ? out : ok).push(p); });
+    return ok.concat(out);
+  }
+
   function productCard(p) {
     const icon = (CATS[p.category] && CATS[p.category].icon) ? CATS[p.category].icon : "🍷";
+    const out  = isOut(p);
     const off  = offPct(p.old_price, p.pix_price);
-    const badge = off >= 5 ? '<div class="mw-off-badge">' + off + '% OFF</div>' : "";
+    const badge = out
+      ? '<div class="mw-off-badge mw-off-badge--out">Indisponível</div>'
+      : (off >= 5 ? '<div class="mw-off-badge">' + off + '% OFF</div>' : "");
     const imgSrc = p.image || ("/assets/img/products/" + p.slug + ".jpg");
     // Fallback elegante sempre presente; a foto real fica por cima e só
     // aparece se carregar (senão o <img> se remove e mostra o fallback).
     const visual = '<div class="mw-fallback">'
       + '<span class="mw-fallback__icon">' + lineIcon(p.category) + '</span>'
-      + '<span>' + p.name + '</span>'
       + '<small>Foto sob consulta</small>'
       + '</div>'
       + '<img class="mw-photo" src="' + imgSrc + '" alt="' + p.name.replace(/"/g, "&quot;") + '" '
       + 'loading="lazy" onerror="this.remove();">';
-    return '<article class="mw-price-card">'
+    return '<article class="mw-price-card' + (out ? ' is-unavailable' : '') + '"'
+      + ' data-cat="' + p.category + '">'
       + '<div class="mw-price-card__image">' + badge + visual + '</div>'
       + '<div class="mw-price-card__body">'
+      + '<div class="mw-price-card__meta">' + (p.tags || []).join(" · ") + '</div>'
       + '<div class="mw-price-card__name">' + p.name + '</div>'
-      + '<div class="mw-price-card__meta">' + (p.tags || []).join(" • ") + '</div>'
       + '<div class="mw-price-block">'
       + (p.old_price ? '<div class="mw-old-price">De: ' + brl(p.old_price) + '</div>' : "")
       + '<div class="mw-main-price">por: <strong>' + brl(p.pix_price) + '</strong> <span>no PIX</span></div>'
       + '</div>'
       + '<div class="mw-card-actions">'
-      + '<a class="mw-btn mw-btn--ifood" href="' + IFOOD_URL + '" target="_blank" rel="noopener">🛒 Comprar no iFood</a>'
+      + (out
+          ? '<span class="mw-btn mw-btn--out" aria-disabled="true">Indisponível no momento</span>'
+          : '<a class="mw-btn mw-btn--ifood" href="' + IFOOD_URL + '" target="_blank" rel="noopener">🛒 Comprar no iFood</a>')
       + '<a class="mw-btn mw-btn--wa" href="' + waMsg(p.name) + '" target="_blank" rel="noopener">💬 Dúvida no WhatsApp</a>'
       + '</div></div></article>';
   }
@@ -113,10 +132,11 @@
   function searchProducts(q) {
     var nq = normalize(q).trim();
     if (!nq) return [];
-    return PRODUCTS.filter(function (p) {
+    var matches = PRODUCTS.filter(function (p) {
       var hay = normalize([p.name, p.category, (p.tags || []).join(" ")].join(" "));
       return hay.indexOf(nq) !== -1;
     });
+    return availableFirst(matches);
   }
 
   // Decide para qual categoria mandar o usuário e navega.
@@ -177,7 +197,8 @@
           +   '<span class="mw-sr-emoji" aria-hidden="true">' + icon + '</span>'
           +   '<img class="mw-sr-img" src="' + esc(img) + '" alt="" loading="lazy" onerror="this.remove();">'
           + '</span>'
-          + '<span class="mw-sr-text"><strong>' + esc(p.name) + '</strong><small>' + esc(title) + '</small></span>'
+          + '<span class="mw-sr-text"><strong>' + esc(p.name) + '</strong><small>' + esc(title)
+          +   (isOut(p) ? ' <em class="mw-sr-out">• indisponível</em>' : '') + '</small></span>'
           + '</button>';
       }).join("");
       results.querySelectorAll("[data-slug]").forEach(function (btn) {
@@ -208,8 +229,10 @@
     }
     if (feat) {
       var featured = Object.keys(CATS).reduce(function(acc, slug){
-        return acc.concat(PRODUCTS.filter(function(p){ return p.category === slug; }).slice(0, 2));
-      }, []).slice(0, 12);
+        var ofCat = availableFirst(PRODUCTS.filter(function(p){ return p.category === slug; }));
+        return acc.concat(ofCat.slice(0, 2));
+      }, []);
+      featured = availableFirst(featured).slice(0, 12);
       feat.innerHTML = featured.map(productCard).join("");
     }
     var form  = document.getElementById("mw-home-search-form");
@@ -227,7 +250,7 @@
     if (!container) return;
 
     var slug = document.body.dataset.category;
-    var list = PRODUCTS.filter(function(p){ return p.category === slug; });
+    var list = availableFirst(PRODUCTS.filter(function(p){ return p.category === slug; }));
     var q    = getQuery("q").toLowerCase().trim();
     if (q) {
       list = list.filter(function(p){
@@ -255,6 +278,7 @@
           btn.classList.add("is-active");
           var tag      = btn.dataset.tag;
           var filtered = tag ? list.filter(function(p){ return (p.tags||[]).indexOf(tag) !== -1; }) : list;
+          filtered = availableFirst(filtered);
           container.innerHTML = filtered.map(productCard).join("");
           if (count) count.textContent = filtered.length + " produto(s) encontrado(s)";
         });
@@ -295,7 +319,7 @@
     if (!track) return;
     var bySlug = {};
     PRODUCTS.forEach(function (p) { bySlug[p.slug] = p; });
-    var list = PHOTO_SLUGS.map(function (s) { return bySlug[s]; }).filter(Boolean);
+    var list = availableFirst(PHOTO_SLUGS.map(function (s) { return bySlug[s]; }).filter(Boolean));
     if (!list.length) { var sec0 = document.getElementById("mw-carousel-section"); if (sec0) sec0.style.display = "none"; return; }
 
     // Lista duplicada => loop contínuo (passa sozinho sem "rebobinar"), estilo casadabebida.

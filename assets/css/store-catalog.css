@@ -369,3 +369,34 @@ body {
     font-size: 13px !important;
   }
 }
+
+/* ─── Produto indisponível (coluna "NÃO TEM" da tabela de preços) ─── */
+.mw-off-badge--out {
+  background: #4a5150;
+  box-shadow: 0 3px 10px rgba(74,81,80,.32);
+  letter-spacing: .02em;
+}
+
+.mw-price-card.is-unavailable .mw-price-card__image .mw-photo,
+.mw-price-card.is-unavailable .mw-price-card__image .mw-fallback {
+  filter: grayscale(1);
+  opacity: .62;
+}
+
+.mw-price-card.is-unavailable .mw-main-price strong {
+  color: #4a5150 !important;
+}
+
+.mw-btn--out {
+  background: #eceeed;
+  color: #5d6666;
+  border: 1px solid #dadedd;
+  cursor: not-allowed;
+  font-weight: 800;
+}
+
+.mw-sr-out {
+  color: #8a5a00;
+  font-style: normal;
+  font-weight: 700;
+}
