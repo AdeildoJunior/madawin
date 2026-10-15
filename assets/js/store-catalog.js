@@ -374,7 +374,11 @@
     "spaten-long-355","eisenbahn-pilsen","devassa-latao","weber-haus-premium","vinha-grande-tto",
     "chandon-baby-brut","gin-intencion-morango",
     "stella-long-330","budweiser-long-330","smirnoff-ice-269","smirnoff-ice-green-269",
-    "gin-intencion-maca","pitu-latao-473","campo-largo","rio-sol-moscatel","rio-sol-demi-sec"
+    "gin-intencion-maca","pitu-latao-473","campo-largo","rio-sol-moscatel","rio-sol-demi-sec",
+    "freixenet-pinot-grigio","nicolas-catena-zapata","pe-branco","pe-tinto",
+    "quinta-bons-ventos-tto","quinta-bons-ventos-br","intruso-branco",
+    "brahma-latao-473","amstel-latao-473","corona-long-330","blue-moon-latao",
+    "pitu-mel-limao","pitu-limao","heineken-lata-350","brahma-duplo-malte"
   ];
 
   function buildCarousel() {
