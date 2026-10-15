@@ -8,7 +8,10 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png">
   <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
   <title>Kits | Mada Wine & Beer</title>
-  <meta name="description" content="Confira kits com preços e promoções na Mada Wine & Beer. Exclusivo para maiores de 18 anos.">
+  <meta name="description" content="Mada Wine & Beer — kits temporariamente indisponíveis. Veja vinhos, cervejas, espumantes e destilados. Exclusivo para maiores de 18 anos.">
+  <!-- KITS-OFF: fora do índice enquanto a categoria estiver sem estoque.
+       Remova esta meta ao reativar os kits (ver KITS-OFF.md). -->
+  <meta name="robots" content="noindex, follow">
   <meta name="theme-color" content="#073b24">
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,7 +53,8 @@
 
 
 </head>
-<body data-category="kits">
+<!-- KITS-OFF: mw-page--solo cola o rodapé no fim da tela nesta página curta -->
+<body data-category="kits" class="mw-page--solo">
 
   <div class="top-warning">
     Venda e consumo de bebidas alcoólicas proibidos para menores de 18 anos. Beba com responsabilidade.
@@ -65,7 +69,8 @@
           <small>madawin.com.br</small>
         </span>
       </a>
-      <form class="mw-search-inline" id="mw-cat-search-form" style="flex:1;max-width:560px;margin:0;" aria-label="Buscar produto">
+      <!-- KITS-OFF: busca oculta enquanto a categoria não tiver itens -->
+      <form class="mw-search-inline" id="mw-cat-search-form" style="display:none;flex:1;max-width:560px;margin:0;" aria-label="Buscar produto">
         <input id="mw-cat-search-input" type="search" placeholder="Buscar em kits...">
         <button class="mw-btn mw-btn--solid" type="submit">Buscar</button>
       </form>
@@ -74,7 +79,7 @@
           <span class="instagram-icon" aria-hidden="true"></span>
           Instagram
         </a>
-        <a class="gold-link" href="https://wa.me/5581996787177?text=Ol%C3%A1%2C+gostaria+de+consultar+Kits+na+Mada+Wine+%26+Beer." target="_blank" rel="noopener">WhatsApp</a>
+        <a class="gold-link" href="https://wa.me/5581996787177?text=Ol%C3%A1%2C+gostaria+de+consultar+as+bebidas+dispon%C3%ADveis+na+Mada+Wine+%26+Beer." target="_blank" rel="noopener">WhatsApp</a>
       </div>
     </div>
     <nav class="category-nav" aria-label="Categorias">
@@ -87,13 +92,16 @@
         <a href="/vodka/">Vodka</a>
         <a href="/gin/">Gin</a>
         <a href="/destilados/">Destilados</a>
-        <a href="/kits/">Kits</a>
+        <!-- KITS-OFF: link restaurado ao reativar a categoria (ver KITS-OFF.md)
+        <a href="/kits/">Kits</a> -->
       </div>
     </nav>
   </header>
 
-  <div class="mw-catalog-layout">
-    <aside class="mw-sidebar">
+  <!-- KITS-OFF: coluna única enquanto não houver filtros a mostrar -->
+  <div class="mw-catalog-layout mw-catalog-layout--solo">
+    <!-- KITS-OFF: filtros ocultos enquanto a categoria não tiver itens -->
+    <aside class="mw-sidebar" style="display:none">
       <h3>Filtrar</h3>
       <div id="mw-filters" class="mw-filter-list"></div>
     </aside>
@@ -110,10 +118,10 @@
   </div>
 
   <a class="whatsapp-float"
-     href="https://wa.me/5581996787177?text=Ol%C3%A1%2C+gostaria+de+consultar+Kits+na+Mada+Wine+%26+Beer."
+     href="https://wa.me/5581996787177?text=Ol%C3%A1%2C+gostaria+de+consultar+as+bebidas+dispon%C3%ADveis+na+Mada+Wine+%26+Beer."
      target="_blank" rel="noopener" aria-label="WhatsApp Mada Wine &amp; Beer">
     <span class="whatsapp-bar-icon" aria-hidden="true">&#127867;</span>
-    <span><strong>Dúvidas sobre kits?</strong> Fale no WhatsApp.</span>
+    <span><strong>Dúvidas?</strong> Fale com a Mada Wine &amp; Beer pelo WhatsApp.</span>
   </a>
 
   <footer class="site-footer">

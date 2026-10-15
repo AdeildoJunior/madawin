@@ -41,11 +41,18 @@ window.MADAWIN_CATEGORIES = {
     "icon": "🥃",
     "filters": ["Rum","Cachaça","Aperitivo","Bacardi","Pitu","Weber Haus","Aperol"]
   },
+  /* ===== KITS-OFF: categoria oculta temporariamente (sem estoque) =========
+     "hidden": true remove os Kits de TODO o site público (menu, filtros,
+     home, busca, carrossel e vitrine) sem apagar nenhum dado.
+     PARA REATIVAR: apague a linha "hidden": true logo abaixo e remova
+     "available:false" dos kits que voltarem a ter estoque. Ver KITS-OFF.md.
+     ====================================================================== */
   "kits": {
     "title": "Kits",
     "subtitle": "Combinações para presente, datas especiais e lembranças.",
     "icon": "🎁",
-    "filters": ["Presente","Celebração","Vinho","Cerveja","Whisky","Premium"]
+    "filters": ["Presente","Celebração","Vinho","Cerveja","Whisky","Premium"],
+    "hidden": true
   }
 };
 

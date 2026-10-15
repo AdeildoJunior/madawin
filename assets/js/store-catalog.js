@@ -1,6 +1,35 @@
 (function () {
   const CATS     = window.MADAWIN_CATEGORIES || {};
-  const PRODUCTS = window.MADAWIN_PRODUCTS   || [];
+  const ALL_PRODUCTS = window.MADAWIN_PRODUCTS || [];
+
+  // ===== KITS-OFF ==========================================================
+  // Uma categoria marcada com "hidden": true em store-data.js desaparece de
+  // todo o site público (menu, home, filtros, busca, carrossel e vitrine),
+  // mas os dados continuam no catálogo para reativação futura.
+  function isHiddenCat(slug) {
+    return !!(CATS[slug] && CATS[slug].hidden === true);
+  }
+
+  // Categorias visíveis, na ordem original do catálogo.
+  const VISIBLE_CATS = Object.keys(CATS).filter(function (slug) {
+    return !isHiddenCat(slug);
+  });
+
+  // Daqui para baixo o site só enxerga produtos de categorias visíveis.
+  const PRODUCTS = ALL_PRODUCTS.filter(function (p) {
+    return !isHiddenCat(p.category);
+  });
+
+  // Remove do menu de categorias os links que apontam para categorias ocultas.
+  function stripHiddenNavLinks() {
+    Object.keys(CATS).forEach(function (slug) {
+      if (!isHiddenCat(slug)) return;
+      document
+        .querySelectorAll('.category-nav a[href="/' + slug + '/"], .nav-scroll a[href="/' + slug + '/"]')
+        .forEach(function (a) { a.remove(); });
+    });
+  }
+  // =========================================================================
   const WA_BASE  = "https://wa.me/5581996787177?text=";
   // Compra direcionada para a loja no iFood; WhatsApp fica para tirar dúvidas.
   const IFOOD_URL = "https://www.ifood.com.br/delivery/recife-pe/mada-wine--beer-madalena/0f98f004-eb88-416a-9e51-d066996ce5a2";
@@ -145,9 +174,9 @@
     if (!raw) return;
     var nq = normalize(raw);
 
-    // 1) Termo é o nome/slug de uma categoria -> abre a categoria inteira.
-    for (var slug in CATS) {
-      if (!CATS.hasOwnProperty(slug)) continue;
+    // 1) Termo é o nome/slug de uma categoria visível -> abre a categoria inteira.
+    for (var i = 0; i < VISIBLE_CATS.length; i++) {
+      var slug = VISIBLE_CATS[i];
       if (normalize(slug).indexOf(nq) !== -1 || normalize(CATS[slug].title).indexOf(nq) !== -1) {
         location.href = "/" + slug + "/";
         return;
@@ -225,10 +254,10 @@
     var best = document.getElementById("mw-best-offers-grid");
     var feat = document.getElementById("mw-featured-grid");
     if (best) {
-      best.innerHTML = Object.entries(CATS).map(function(e){ return categoryCard(e[0], e[1]); }).join("");
+      best.innerHTML = VISIBLE_CATS.map(function(slug){ return categoryCard(slug, CATS[slug]); }).join("");
     }
     if (feat) {
-      var featured = Object.keys(CATS).reduce(function(acc, slug){
+      var featured = VISIBLE_CATS.reduce(function(acc, slug){
         var ofCat = availableFirst(PRODUCTS.filter(function(p){ return p.category === slug; }));
         return acc.concat(ofCat.slice(0, 2));
       }, []);
@@ -250,6 +279,40 @@
     if (!container) return;
 
     var slug = document.body.dataset.category;
+
+    // KITS-OFF: a página da categoria oculta continua existindo (nada foi
+    // apagado), mas não mostra produtos nem grade vazia — só um aviso curto
+    // com caminho de volta, para quem chegar por link antigo ou buscador.
+    if (isHiddenCat(slug)) {
+      var cat   = CATS[slug] || {};
+      var hTtl  = document.getElementById("mw-category-title");
+      var hSub  = document.getElementById("mw-category-subtitle");
+      var hCnt  = document.getElementById("mw-category-count");
+      var hBox  = document.getElementById("mw-filters");
+      if (hTtl) hTtl.textContent = cat.title || "Categoria";
+      if (hSub) hSub.textContent = "Temporariamente sem itens disponíveis.";
+      if (hCnt) hCnt.textContent = "";
+      // Esconde a coluna de filtros inteira para não sobrar espaço vazio.
+      var side = hBox && hBox.closest(".mw-sidebar");
+      if (side) side.style.display = "none";
+      var layout = container.closest(".mw-catalog-layout");
+      if (layout) layout.classList.add("mw-catalog-layout--solo");
+      document.body.classList.add("mw-page--solo");
+      container.className = "mw-empty-cat";
+      container.innerHTML =
+        '<p class="mw-empty-cat__text">Não temos ' + (cat.title || "itens").toLowerCase()
+        + ' disponíveis no momento. Veja nossas outras categorias ou fale com a gente.</p>'
+        + '<div class="mw-empty-cat__actions">'
+        +   '<a class="mw-btn mw-btn--solid" href="/">Ver todas as categorias</a>'
+        +   '<a class="mw-btn mw-btn--wa" href="' + WA_BASE
+        +     encodeURIComponent("Olá! Gostaria de consultar as bebidas disponíveis na Mada Wine & Beer.")
+        +     '" target="_blank" rel="noopener">\uD83D\uDCAC Falar no WhatsApp</a>'
+        + '</div>';
+      var cForm = document.getElementById("mw-cat-search-form");
+      if (cForm) cForm.style.display = "none";
+      return;
+    }
+
     var list = availableFirst(PRODUCTS.filter(function(p){ return p.category === slug; }));
     var q    = getQuery("q").toLowerCase().trim();
     if (q) {
@@ -352,6 +415,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", function(){
+    stripHiddenNavLinks();
     wireHeaderSearch();
     buildHome();
     buildCarousel();
